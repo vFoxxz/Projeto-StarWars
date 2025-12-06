@@ -1,0 +1,113 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body, html {
+    background-color: #f3f3f3;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    display: flex;
+    padding: 20px;
+    gap: 30px;
+}
+
+.lista {
+    width: 280px;
+    background: #abc7e8;
+    padding: 15px;
+    border-radius: 8px;   
+}
+
+.lista h2 {
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.pesquisa {
+    margin-bottom: 20px;
+}
+
+.pesquisa input {
+    width: 100%;
+    padding: 5px;
+    border-radius: 4px;
+    border: none;
+}
+
+.lista ul {
+    list-style: none;
+    overflow-y: auto;  
+    flex: 1; 
+    padding-right: 10px;
+}
+
+.lista ul li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+
+.info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.secao {
+    margin-bottom: 30px;
+}
+
+.secao h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.box {
+    background-color: #a9c4e6;
+    height: 200px;
+    border-radius: 8px;
+    padding: 15px;
+
+}
+
+.box.extra {
+    height: 200px;
+}
+
+.box.extra p {
+    margin-bottom: 12px;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 25px;
+    background-color: black;
+    color: white;
+    position: relative;
+
+}
+
+.footer-lista {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    font-size: 14px;
+}
+
+.footer-lista li {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.footer-lista li:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,25 @@
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 25px;
+    background-color: black; 
+    color: white;            
+    position: relative;
+}
+
+.footer-lista {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    font-size: 14px;
+}
+
+.footer-lista li {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.footer-lista li:hover {
+    text-decoration: underline;
+}
