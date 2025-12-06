@@ -1,3 +1,8 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
 .footer {
     display: flex;
     justify-content: space-between;
@@ -5,9 +10,9 @@
     padding: 12px 25px;
     background-color: black;
     color: white;
-    position: fixed;
     bottom: 0;
     width: 100%;
+    position: fixed;
 }
 
 .footer-lista {
