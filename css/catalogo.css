@@ -36,6 +36,7 @@ body.dark-mode .container {
     padding: 30px;
     border-radius: 8px;   
     height: 80%;
+    
 }
 
 body.dark-mode .lista {
@@ -64,6 +65,7 @@ body.dark-mode .lista {
     overflow-y: auto;  
     flex: 1; 
     padding-right: 10px;
+    max-height: 80%;
 }
 
 .lista ul li {
@@ -94,14 +96,26 @@ body.dark-mode .lista {
     border-radius: 8px;
     padding: 15px;
 }
+.box ul{
+    list-style: none;
+    overflow-y: auto;  
+    flex: 1; 
+    padding-right: 10px;
+    max-height: 200px;
+}
 
 body.dark-mode .box {
     background-color: #6b0f0f;
     color: #ffffff;
 }
 .box.extra {
-    height: 200px;
+    list-style: none;
+    overflow-y: auto;  
+    flex: 1; 
+    padding-right: 10px;
+    max-height: 200px;
 }
+
 
 .box.extra p {
     margin-bottom: 12px;
@@ -109,4 +123,16 @@ body.dark-mode .box {
 
 footer{
     margin-top: auto;
+}
+
+.item{
+    cursor: pointer;
+}
+
+.item:hover{
+    color: rgb(255, 255, 255);
+}
+
+.dark-mode .item:hover{
+    color: #837c7c;
 }
