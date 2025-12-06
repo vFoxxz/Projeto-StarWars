@@ -2,8 +2,6 @@ const toggle = document.getElementById("darkModeToggle");
 const logo = document.querySelector(".logo-star");
 const saber = document.querySelector(".logo-dark");
 
-
-
 toggle.addEventListener("click", () => {
     const isDark = document.body.classList.toggle("dark-mode")
     
