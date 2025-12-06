@@ -2,3 +2,28 @@ body {
     background-color: white;
     margin: 0;
 }
+
+body.dark-mode {
+  background-color: #272626; /* fundo escuro */
+  color: #ffffff; /* texto claro */
+}
+
+.faixa-principal {
+    background-image: url('../src/img/AnakinCapa.png');
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: cover;
+    width: 100%;
+    margin-top: -2px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 40rem;
+    outline: 2px solid #6ca5f0;
+}
+
+body.dark-mode .faixa-principal {
+  background-image: url('../src/img/DarthVaderCapa.png');
+  outline: 2px solid #6b0f0f;
+  margin-top: -5px;
+}
