@@ -1,171 +1,142 @@
 const camposPessoais = [
-  "name",
-  "height",
-  "mass",
-  "hair_color",
-  "skin_color",
-  "eye_color",
-  "birth_year",
-  "gender",
-  "homeworld"
+    "name",
+    "height",
+    "mass",
+    "hair_color",
+    "skin_color",
+    "eye_color",
+    "birth_year",
+    "gender",
+    "homeworld"
 ];
 
-const camposAdicionais = [
-    "films",
-    "species",
-    "vehicles",
-    "starships",
-]
+const nomesOrdenados = [];
+const filmesPersonagens = [];
+const VeiculosPersonagens = [];
+const NavesPersonagens = [];
 
-fetch("https://swapi.dev/api/people")
+
+const apiKey = `https://swapi.dev/api/${consultaAPI}/`;
+
+fetch(apiKey)
     .then(response => response.json())
     .then(data => {
-        let lista=document.querySelector(".lista-personagens")
-        data.results.forEach(personagens => {
-            let li = document.createElement("li")
-            li.innerText = personagens.name
-            li.setAttribute("class", "item")
+        const contador = data.count;
+        const lista = document.querySelector('.lista-personagens');
 
-            li.addEventListener("click", async function () {
-                let listaPessoal = document.querySelector(".listaPessoal");
-                let listaAdicional = document.querySelector(".adicional");
-                listaPessoal.innerHTML = "";
-                listaAdicional.innerHTML = "";
+        const personagens = []; // guarda objetos completos
 
-                let listaItens = Object.entries(personagens);
-                for (let [chave, item] of listaItens) {
-                    let liPessoal = document.createElement("li");
+        async function Consulta(linkConsulta, consultaAPI) {
+            const response = await fetch(linkConsulta);
+            const jsonResposta = await response.json();
 
-                    if (chave === "homeworld") {
-                        try {
-                            const res = await fetch(item);
-                            const planeta = await res.json();
-                            item = planeta.name;
-                        } catch (error) {
-                            console.error("Erro ao buscar planeta: ", error);
-                        }
-                    }
+            if (consultaAPI === 'people') {
+                // Consultas Planeta
+                const responsePlanet = await fetch(jsonResposta.homeworld);
+                const jsonPlanet = await responsePlanet.json();
+                jsonResposta.homeworld = jsonPlanet.name;
 
-
-
-                    
-                    if (camposPessoais.includes(chave)) {
-                        liPessoal.innerText = `${chave} : ${item}`;
-                        listaPessoal.appendChild(liPessoal);
-                    } else if (camposAdicionais.includes(chave)) {
-                        if (chave === "films") {
-                            let filmesTitulo = document.createElement("h3");
-                            filmesTitulo.innerText = "Filmes";
-                            listaAdicional.appendChild(filmesTitulo);
-
-                            let listaFilmes = document.createElement("ul");
-
-                            for (let urlFilme of item) {   // item já é array
-                                try {
-                                    const res = await fetch(urlFilme);
-                                    const filme = await res.json();
-
-                                    let liFilme = document.createElement("li");
-                                    liFilme.innerText = filme.title; // campo correto
-                                    listaFilmes.appendChild(liFilme);
-                                } catch (error) {
-                                    console.error("Erro ao buscar filme:", error);
-                                }
-                            }
-
-                            listaAdicional.appendChild(listaFilmes);
-                        } else if (chave === "species") {
-                            let especieTitulo = document.createElement("h3");
-                            especieTitulo.innerText = "Espécies";
-                            listaAdicional.appendChild(especieTitulo);
-
-                            let listaEspecies = document.createElement("ul");
-
-                            for (let urlEspecie of item) {
-                                try {
-                                    const res = await fetch(urlEspecie);
-                                    const especie = await res.json();
-
-                                    let liEspecie = document.createElement("li");
-                                    liEspecie.innerText = especie.name; // campo correto
-                                    listaEspecies.appendChild(liEspecie);
-                                } catch (error) {
-                                    console.error("Erro ao buscar espécie:", error);
-                                }
-                            }
-
-                            listaAdicional.appendChild(listaEspecies);
-                        } else if (chave === "vehicles") {
-                            let veiculoTitulo = document.createElement("h3")
-                            veiculoTitulo.innerText = "Veículos"
-                            listaAdicional.appendChild(veiculoTitulo)
-
-                            let listaVeiculo = document.createElement("ul")
-
-                            for (let urlVeiculo of item) {
-                                try {
-                                    const res = await fetch(urlVeiculo)
-                                    const veiculo = await res.json()
-
-                                    let liVeiculo = document.createElement("li")
-                                    liVeiculo.innerText = veiculo.name
-                                    listaVeiculo.appendChild(liVeiculo)
-                                } catch (error) {
-                                    console.error("Erro ao buscar veiculo:", error);
-                                }
-                            }
-
-                            listaAdicional.appendChild(listaVeiculo)
-                        } else if (chave === "starships") {
-                            let naveTitulos = document.createElement("h3")
-                            naveTitulos.innerText = "Naves"
-                            listaAdicional.appendChild(naveTitulos)
-
-                            let listaNave = document.createElement("ul")
-
-                            for (let urlNave of item) {
-                                try {
-                                    const res = await fetch(urlNave)
-                                    const nave = await res.json()
-                                    
-                                    let liNave = document.createElement("li")
-                                    liNave.innerText = nave.name
-                                    listaNave.appendChild(liNave)
-                                } catch (error) {
-                                    console.error("Erro ao buscar nave:", error);
-                                }
-                            }
-                            listaAdicional.appendChild(listaNave)
-                        }
-
-                    }
-                    
-                }
-});
-
-
-            lista.appendChild(li)
-        });
-
-        let pesquisa = document.querySelector(".campoPesquisa")
-        let itens=lista.getElementsByTagName("li")
-        pesquisa.addEventListener("input", function () {
-            let filtro = pesquisa.value.toLowerCase();
-
-            for (let i = 0; i < itens.length; i++){
-                let texto = itens[i].textContent.toLowerCase();
-                if (texto.includes(filtro)) {
-                    itens[i].style.display=""
+                // Consultas Espécie
+                if (jsonResposta.species.length > 0) {
+                    const responseSpecie = await fetch(jsonResposta.species[0]); // pega a primeira espécie
+                    const jsonSpecie = await responseSpecie.json();
+                    jsonResposta.species = jsonSpecie.name;
                 } else {
-                    itens[i].style.display="none"
+                    jsonResposta.species = 'Desconhecida';
+                }
+
+
+
+                // guarda personagem
+                personagens.push(jsonResposta);
+
+                // ordena por nome
+                personagens.sort((a, b) => a.name.localeCompare(b.name));
+
+                // re-renderiza lista
+                lista.innerHTML = '';
+                for (let personagem of personagens) {
+                    const li = document.createElement('li');
+                    li.innerText = personagem.name;
+                    li.setAttribute('class', 'item');
+
+                    li.addEventListener('click', async () => {
+                        const listaPessoal = document.querySelector('.listaPessoal');
+                        const listaAdicional = document.querySelector('.adicional');
+
+                        listaPessoal.innerHTML = `
+                            <li>
+                                <strong>Nome:</strong> ${personagem.name}<br>
+                                <strong>Altura:</strong> ${personagem.height} cm<br>
+                                <strong>Peso:</strong> ${personagem.mass} kg<br>
+                                <strong>Cabelo:</strong> ${personagem.hair_color}<br>
+                                <strong>Pele:</strong> ${personagem.skin_color}<br>
+                                <strong>Olhos:</strong> ${personagem.eye_color}<br>
+                                <strong>Nascimento:</strong> ${personagem.birth_year}<br>
+                                <strong>Gênero:</strong> ${personagem.gender}<br>
+                                <strong>Planeta:</strong> ${personagem.homeworld}<br>
+                                <strong>Espécie: </strong> ${personagem.species}<br> 
+                            </li>
+                            `;
+
+                        //Limpa Arrays pro proximo personagem
+                        VeiculosPersonagens.length = 0;
+                        filmesPersonagens.length = 0;
+                        NavesPersonagens.length = 0;
+
+                        //Consulta Filmes
+                        for (let linkFilme of personagem.films) {
+                            const responseFilme = await fetch(linkFilme);
+                            const filme = await responseFilme.json();
+                            filmesPersonagens.push(filme.title);
+                        }
+                        //Consultas Veículos
+                        for (let linkVeiculo of personagem.vehicles) {
+                            const responseVehicles = await fetch(linkVeiculo);
+                            const veiculo = await responseVehicles.json();
+                            VeiculosPersonagens.push(veiculo.name);
+                        }
+
+                        //Consultas naves
+                        for (let linkNave of personagem.starships) {
+                            const responseStarships = await fetch(linkNave);
+                            const nave = await responseStarships.json();
+                            NavesPersonagens.push(nave.name);
+                        }
+
+
+                        listaAdicional.innerHTML = `
+                        <li>
+                        <strong>Filmes:</strong>
+                        ${filmesPersonagens.map(filme => `<li>${filme}</li>`).join('')}
+                        <br>
+                        <strong>Veículos:</strong>
+                        ${VeiculosPersonagens.length > 0 ? VeiculosPersonagens.map(veiculo => `<li>${veiculo}</li>`).join('') : 'Não tem'}
+                        <br>
+                        <strong>Naves:</strong>
+                        ${NavesPersonagens.length > 0 ? NavesPersonagens.map(nave => `<li>${nave}</li>`).join('') : 'Não tem'}
+                        </li>
+                        `;
+                    });
+
+                    lista.appendChild(li);
                 }
             }
-        })
+        }
 
 
+        for (let i = 1; i <= contador; i++) {
+            if (i === 17) {
+                continue;
+            }
+            const linkConsulta = apiKey + i;
+            Consulta(linkConsulta, consultaAPI)
+
+        }
 
 
     })
+
     .catch(error =>
         console.error("Erro: ", error)
     )
