@@ -1,6 +1,12 @@
+@font-face {
+    font-family: 'font-galaxy';
+    src: url('../src/font/SF\ Distant\ Galaxy.ttf');
+}
 body{
     margin: 0;
     padding: 0;
+    font-family: 'font-galaxy';
+    font-weight: 100;
 }
 
 .footer {

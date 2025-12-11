@@ -3,6 +3,16 @@ body {
     margin: 0;
 }
 
+@font-face {
+    font-family: 'font-galaxy';
+    src: url('../src/font/SF\ Distant\ Galaxy.ttf');
+}
+
+@font-face {
+  font-family: 'londrina';
+  src: url('../src/font/LondrinaSolid-Regular.otf');
+}
+
 body.dark-mode {
   background-color: #272626; /* fundo escuro */
   color: #ffffff; /* texto claro */
@@ -26,4 +36,86 @@ body.dark-mode .faixa-principal {
   background-image: url('../src/img/DarthVaderCapa.png');
   outline: 2px solid #6b0f0f;
   margin-top: -5px;
+}
+
+.introducao-principal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 2rem;
+    margin: 10px 10px;
+    border-radius: 10px;
+    color: black;
+    background-color: #c3d8f1;
+    font-family: 'font-galaxy';
+    h1{
+      font-weight: lighter;
+      margin-top: 5px;
+    }
+    h3{
+      font-weight: lighter;
+    }
+}
+
+.introducao-texto{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  
+  
+  .simbolo{
+    align-items: center;
+    justify-content: center;
+    background-image: url('../src/img/simbolojedi.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 11vh;
+    height: 11vh;
+  }
+
+  p{
+    font-size: 2rem;
+    font-family: 'londrina';
+  }
+}
+
+body.dark-mode .introducao-principal {
+    background-color: #5e0505;
+    color: #ffffff;
+}
+body.dark-mode .simbolo {
+    width: 15vh;
+    height: 15vh;
+    margin-top: -15px;
+    background-image: url('../src/img/simbolo_imperio.png');
+}
+
+.gif{
+  background-image: url('../src/gif/AnakinGIF.gif');
+  width: 540px;
+  height: 384px;
+  border-radius: 10px;
+}
+
+body.dark-mode .gif{
+  background-image: url('../src/gif/DarthVaderGIF.gif');
+}
+
+h2{
+  font-family: 'londrina';
+  font-size: 2rem;
+}
+
+.div-frase{
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+.SoleLua{
+  width: 40px;
+  height: 40px;
+  margin-left: 15px;
 }
