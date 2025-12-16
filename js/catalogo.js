@@ -10,6 +10,15 @@ const camposPessoais = [
     "homeworld"
 ];
 
+const generoMap = {
+  male: "Masculino",
+  female: "Feminino",
+  "n/a": "N/A",
+  none: "Nenhum",
+  hermaphrodite: "Hermafrodita"
+};
+
+
 const nomesOrdenados = [];
 const filmes = [];
 const VeiculosPersonagens = [];
@@ -30,8 +39,10 @@ const especies = [];
 const params = new URLSearchParams(window.location.search)
 const consultaAPI = params.get('tipo')
 const lista = document.querySelector('.lista-personagens');
+const tituloLista = document.querySelector('.titulo-lista');
+const inputPesquisa = document.getElementById('searchInput');
 
-
+const containerLista = document.querySelector('.container-listas');
 
 const apiKey = `https://swapi.dev/api/${consultaAPI}/`;
 
@@ -85,8 +96,13 @@ async function getCount(apiKey) {
 async function Consulta(linkConsulta, consultaAPI) {
     const jsonResposta = await fetchLocalStorage(`item_${linkConsulta}`, linkConsulta);
 
+        
+    
     if (consultaAPI === 'people') {
         // Consultas Planeta
+
+        tituloLista.textContent = 'Lista de personagens';
+        inputPesquisa.setAttribute('placeholder', 'Pesquisar personagens...')
         const jsonPlanet = await fetchLocalStorage(`planet_${jsonResposta.homeworld}`, jsonResposta.homeworld)
         jsonResposta.homeworld = jsonPlanet.name
 
@@ -103,32 +119,27 @@ async function Consulta(linkConsulta, consultaAPI) {
 
         // ordena por nome
         personagens.sort((a, b) => a.name.localeCompare(b.name));
-
-        // re-renderiza lista
-        lista.innerHTML = '';
+        containerLista.innerHTML = '';
         for (let personagem of personagens) {
-            const li = document.createElement('li');
-            li.innerText = personagem.name;
-            li.setAttribute('class', 'item');
-
-            li.addEventListener('click', async () => {
-                const listaPessoal = document.querySelector('.listaPessoal');
-                const listaAdicional = document.querySelector('.adicional');
-
-                listaPessoal.innerHTML = `
-                            <li>
-                                <strong>Nome:</strong> ${personagem.name}<br>
-                                <strong>Altura:</strong> ${personagem.height} cm<br>
-                                <strong>Peso:</strong> ${personagem.mass} kg<br>
-                                <strong>Cabelo:</strong> ${personagem.hair_color}<br>
-                                <strong>Pele:</strong> ${personagem.skin_color}<br>
-                                <strong>Olhos:</strong> ${personagem.eye_color}<br>
-                                <strong>Nascimento:</strong> ${personagem.birth_year}<br>
-                                <strong>Gênero:</strong> ${personagem.gender}<br>
-                                <strong>Planeta:</strong> ${personagem.homeworld}<br>
-                                <strong>Espécie: </strong> ${personagem.species}<br> 
-                            </li>
+            const div = document.createElement('div');
+            div.setAttribute('class', 'catalogo');
+            div.innerHTML='';
+            div.innerHTML = `
+                                ${personagem.name}
+                                <br>
+                                <div class="info-card"> 
+                                     ${generoMap[personagem.gender]}
+                                     <br>
+                                     <span class="linha-raca"> <span class="raca"> Raça: </span> ${personagem.species === 'Human' ? 'Humano' : personagem.species} </span>
+                                </div>
                             `;
+            
+            div.setAttribute('data-bs-target', '#exampleModalCenter');
+            div.setAttribute('data-bs-toggle', 'modal');
+            
+            div.addEventListener('click', async () => {
+                
+                const listaPessoal = document.querySelector('.modal-body');
 
                 //Limpa Arrays pro proximo personagem
                 VeiculosPersonagens.length = 0;
@@ -152,28 +163,45 @@ async function Consulta(linkConsulta, consultaAPI) {
                     NavesPersonagens.push(nave.name);
                 }
 
+                listaPessoal.innerHTML = `
+                                <strong>Nome:</strong> ${personagem.name}<br>
+                                <strong>Altura:</strong> ${personagem.height} cm<br>
+                                <strong>Peso:</strong> ${personagem.mass} kg<br>
+                                <strong>Cabelo:</strong> ${personagem.hair_color}<br>
+                                <strong>Pele:</strong> ${personagem.skin_color}<br>
+                                <strong>Olhos:</strong> ${personagem.eye_color}<br>
+                                <strong>Nascimento:</strong> ${personagem.birth_year}<br>
+                                <strong>Gênero:</strong> ${personagem.gender}<br>
+                                <strong>Planeta:</strong> ${personagem.homeworld}<br>
+                                <strong>Espécie: </strong> ${personagem.species}<br> 
+                                <hr>
+                                <strong> Informações adicionais </strong>
+                                <br>
+                                <br>
+                                <strong>Filmes:</strong>
+                                ${filmes.map(filme => `<li>${filme}</li>`).join('')}
+                                <br>
+                                <strong>Veículos:</strong>
+                                ${VeiculosPersonagens.length > 0 ? VeiculosPersonagens.map(veiculo => `<li>${veiculo}</li>`).join('') : 'Não tem<br>'}
+                                <br>
+                                <strong>Naves:</strong>
+                                ${NavesPersonagens.length > 0 ? NavesPersonagens.map(nave => `<li>${nave}</li>`).join('') : 'Não tem<br>'}
+                            `;
 
-                listaAdicional.innerHTML = `
-                        <li>
-                        <strong>Filmes:</strong>
-                        ${filmes.map(filme => `<li>${filme}</li>`).join('')}
-                        <br>
-                        <strong>Veículos:</strong>
-                        ${VeiculosPersonagens.length > 0 ? VeiculosPersonagens.map(veiculo => `<li>${veiculo}</li>`).join('') : 'Não tem<br>'}
-                        <br>
-                        <strong>Naves:</strong>
-                        ${NavesPersonagens.length > 0 ? NavesPersonagens.map(nave => `<li>${nave}</li>`).join('') : 'Não tem<br>'}
-                        </li>
-                        `;
+                
+
+
             });
-
-            lista.appendChild(li);
+            containerLista.appendChild(div);
         }
     } else if (consultaAPI === 'planets') {
+        tituloLista.textContent = 'Lista de planetas';
+        inputPesquisa.setAttribute('placeholder', 'Pesquisar planetas...')
         planetas.push(jsonResposta);
         planetas.sort((a, b) => a.name.localeCompare(b.name))
 
         lista.innerHTML = ''
+        containerLista.innerHTML = '';
         for (let planeta of planetas) {
 
             const li = document.createElement('li');
@@ -227,6 +255,8 @@ async function Consulta(linkConsulta, consultaAPI) {
 
         }
     } else if (consultaAPI === 'starships') {
+        tituloLista.textContent = 'Lista de naves';
+        inputPesquisa.setAttribute('placeholder', 'Pesquisar naves...')
         naves.push(jsonResposta)
         naves.sort((a, b) => a.name.localeCompare(b.name))
         lista.innerHTML = ''
@@ -282,6 +312,8 @@ async function Consulta(linkConsulta, consultaAPI) {
             lista.append(li)
         }
     } else if (consultaAPI === 'vehicles') {
+        tituloLista.textContent = 'Lista de veículos';
+        inputPesquisa.setAttribute('placeholder', 'Pesquisar veículos...')
         veiculos.push(jsonResposta)
         veiculos.sort((a, b) => a.name.localeCompare(b.name))
         lista.innerHTML = ''
@@ -336,6 +368,8 @@ async function Consulta(linkConsulta, consultaAPI) {
         }
 
     } else if (consultaAPI === 'films') {
+        tituloLista.textContent = 'Lista de filmes';
+        inputPesquisa.setAttribute('placeholder', 'Pesquisar filmes...')
         filmes.push(jsonResposta)
         filmes.sort((a, b) => a.title.localeCompare(b.title))
         lista.innerHTML = ''
@@ -414,6 +448,8 @@ async function Consulta(linkConsulta, consultaAPI) {
             lista.append(li)
         }
     } else if (consultaAPI === 'species') {
+        tituloLista.textContent = 'Lista de espécies';
+        inputPesquisa.setAttribute('placeholder', 'Pesquisar espécies...')
         const jsonPlanet = await fetchLocalStorage(`planet_${jsonResposta.homeworld}`, jsonResposta.homeworld);
         jsonResposta.homeworld = jsonPlanet.name;
 
@@ -476,10 +512,9 @@ carregarTodos(consultaAPI).then(async (todos) => {
     await Promise.all(todos.map(item => Consulta(item.url, consultaAPI)));
 });
 
-let pesquisa = document.querySelector(".campoPesquisa")
-let itens = lista.getElementsByTagName("li")
-pesquisa.addEventListener("input", function () {
-    let filtro = pesquisa.value.toLowerCase();
+let itens = containerLista.getElementsByClassName('catalogo');
+inputPesquisa.addEventListener("input", function () {
+    let filtro = inputPesquisa.value.toLowerCase();
 
     for (let i = 0; i < itens.length; i++) {
         let texto = itens[i].textContent.toLowerCase();
