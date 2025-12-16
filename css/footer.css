@@ -1,12 +1,14 @@
 @font-face {
     font-family: 'font-galaxy';
-    src: url('../src/font/SF\ Distant\ Galaxy.ttf');
+    src: url('../src/font/SF Distant Galaxy.ttf');
 }
-body{
+
+html, body {
     margin: 0;
     padding: 0;
+    background: black;
     font-family: 'font-galaxy';
-    font-weight: 100;
+    overflow: hidden; /* impede scroll dentro do iframe */
 }
 
 .footer {
@@ -16,23 +18,42 @@ body{
     padding: 12px 25px;
     background-color: black;
     color: white;
-    bottom: 0;
     width: 100%;
-    position: fixed;
+    flex-wrap: wrap;
+}
+
+.footer p {
+    margin: 0;
 }
 
 .footer-lista {
     display: flex;
     gap: 20px;
     list-style: none;
-    font-size: 14px;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
 }
 
-.footer-lista li {
+.footer-lista li a {
+    color: white;
+    text-decoration: none;
     cursor: pointer;
-    text-decoration: underline;
 }
 
-.footer-lista li:hover {
-    text-decoration: underline;
+.footer-lista li a:hover {
+    opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+    .footer {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .footer-lista {
+        justify-content: center;
+        gap: 12px;
+    }
 }

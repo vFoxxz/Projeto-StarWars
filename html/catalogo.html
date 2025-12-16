@@ -10,49 +10,60 @@
 
 <body>
 
-        <iframe src="../html/header.html" frameborder="0" width="100%"></iframe>
-        <div class="container">
+    <iframe src="../html/header.html" frameborder="0" width="100%"></iframe>
+    <div class="container">
 
-            <aside class="lista">
-                <h2>Lista de Personagens</h2>
+        <aside class="lista">
+            <h2>Lista de Personagens</h2>
 
-                <div class="pesquisa">
-                    <label>Pesquisa:</label>
-                    <input type="text" class="campoPesquisa">
+            <div class="pesquisa">
+                <label>Pesquisa:</label>
+                <input type="text" class="campoPesquisa">
+            </div>
+
+            <ul class="lista-personagens">
+
+            </ul>
+        </aside>
+
+        <main class="info">
+
+            <section class="secao">
+                <h3>Informações pessoais</h3>
+                <div class="box pessoal">
+                    <ul class="listaPessoal">
+
+                    </ul>
                 </div>
+            </section>
 
-                <ul class="lista-personagens">
-                    
-                </ul>
-            </aside>
+            <section class="secao">
+                <h3>Informações adicionais</h3>
 
-            <main class="info">
+                <div class="box extra adicional">
 
-                <section class="secao">
-                    <h3>Informações pessoais</h3>
-                    <div class="box pessoal">
-                        <ul class="listaPessoal">
-                            
-                        </ul>
-                    </div>
-                </section>
+                </div>
+            </section>
 
-                <section class="secao">
-                    <h3>Informações adicionais</h3>
+        </main>
+    </div>
+    
+    <footer>
+        <iframe src="../html/footer.html" frameborder="0" style="width: 100%; height: auto;" scrolling="no"></iframe>
+    </footer>
+    <script>
+        const footerFrame = document.querySelector("footer iframe");
 
-                    <div class="box extra adicional">
-                        
-                    </div>
-                </section>
-
-            </main>
-        </div>
-        <footer>
-            <iframe src="../html/footer.html" frameborder="0" style="width: 100%; height: 60px;"></iframe>
-        </footer>
+        footerFrame.onload = function () {
+            const altura = footerFrame.contentWindow.document.body.scrollHeight;
+            footerFrame.style.height = altura + "px";
+        };
+    </script>
     <script src="../js/darkMode.js"></script>
     <script src="../js/ListenerDark.js"></script>
     <script src="../js/catalogo.js"></script>
+    
+
 </body>
 
 </html>

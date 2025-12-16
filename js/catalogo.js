@@ -413,22 +413,21 @@ async function Consulta(linkConsulta, consultaAPI) {
             })
             lista.append(li)
         }
-    }else if (consultaAPI === 'species') {
-                const responsePlanet = await fetch(jsonResposta.homeworld);
-                const jsonPlanet = await fetchLocalStorage(`planet_${jsonResposta.homeworld}`, jsonResposta.homeworld);
-                jsonResposta.homeworld = jsonPlanet.name;
+    } else if (consultaAPI === 'species') {
+        const jsonPlanet = await fetchLocalStorage(`planet_${jsonResposta.homeworld}`, jsonResposta.homeworld);
+        jsonResposta.homeworld = jsonPlanet.name;
 
-                especies.push(jsonResposta)
-                especies.sort((a, b) => a.name.localeCompare(b.name))
-                lista.innerHTML = ''
-                for (let especie of especies) {
-                    const li = document.createElement('li');
-                    li.innerText = especie.name;
-                    li.setAttribute('class', 'item');
-                    li.addEventListener("click", async () => {
-                        const listaPessoal = document.querySelector('.listaPessoal');
-                        const listaAdicional = document.querySelector('.adicional');
-                        listaPessoal.innerHTML = `
+        especies.push(jsonResposta)
+        especies.sort((a, b) => a.name.localeCompare(b.name))
+        lista.innerHTML = ''
+        for (let especie of especies) {
+            const li = document.createElement('li');
+            li.innerText = especie.name;
+            li.setAttribute('class', 'item');
+            li.addEventListener("click", async () => {
+                const listaPessoal = document.querySelector('.listaPessoal');
+                const listaAdicional = document.querySelector('.adicional');
+                listaPessoal.innerHTML = `
                             <li>
                                 <strong>Nome:</strong> ${especie.name}<br>
                                 <strong>Classificação:</strong> ${especie.classification}<br>
@@ -443,20 +442,20 @@ async function Consulta(linkConsulta, consultaAPI) {
                             </li>
                         `;
 
-                        pilotos.length = 0
-                        filmes.length = 0;
+                pilotos.length = 0
+                filmes.length = 0;
 
-                        for (let linkFilme of especie.films) {
-                            const filme = await fetchLocalStorage(`filme_${linkFilme}`, linkFilme)
-                            filmes.push(filme.title)
-                        }
+                for (let linkFilme of especie.films) {
+                    const filme = await fetchLocalStorage(`filme_${linkFilme}`, linkFilme)
+                    filmes.push(filme.title)
+                }
 
-                        for (let linkPiloto of especie.people) {
-                            const piloto = await fetchLocalStorage(`people_${linkPiloto}`, linkPiloto)
-                            pilotos.push(piloto.name)
-                        }
+                for (let linkPiloto of especie.people) {
+                    const piloto = await fetchLocalStorage(`people_${linkPiloto}`, linkPiloto)
+                    pilotos.push(piloto.name)
+                }
 
-                        listaAdicional.innerHTML = `
+                listaAdicional.innerHTML = `
                             <li>
                             <strong>Pessoas:</strong><br>
                             ${pilotos.length > 0 ? pilotos.map(piloto => `<li>${piloto}</li>`).join('') : 'Não tem<br>'}
@@ -467,39 +466,27 @@ async function Consulta(linkConsulta, consultaAPI) {
                             <\li>
                         `
 
-                    })
-                    lista.append(li)
-                }
-            }
+            })
+            lista.append(li)
+        }
+    }
 }
 
 carregarTodos(consultaAPI).then(async (todos) => {
     await Promise.all(todos.map(item => Consulta(item.url, consultaAPI)));
 });
 
-/* 
-       
+let pesquisa = document.querySelector(".campoPesquisa")
+let itens = lista.getElementsByTagName("li")
+pesquisa.addEventListener("input", function () {
+    let filtro = pesquisa.value.toLowerCase();
+
+    for (let i = 0; i < itens.length; i++) {
+        let texto = itens[i].textContent.toLowerCase();
+        if (texto.includes(filtro)) {
+            itens[i].style.display = ""
+        } else {
+            itens[i].style.display = "none"
         }
-
-
-        carregarTodos(consultaAPI).then(async (todos) => {
-            await Promise.all(todos.map(item => Consulta(item.url, consultaAPI)));
-        });
-
-
-        let pesquisa = document.querySelector(".campoPesquisa")
-        let itens = lista.getElementsByTagName("li")
-        pesquisa.addEventListener("input", function () {
-            let filtro = pesquisa.value.toLowerCase();
-
-            for (let i = 0; i < itens.length; i++) {
-                let texto = itens[i].textContent.toLowerCase();
-                if (texto.includes(filtro)) {
-                    itens[i].style.display = ""
-                } else {
-                    itens[i].style.display = "none"
-                }
-            }
-        })
-
-    }) */
+    }
+})
