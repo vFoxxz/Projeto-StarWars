@@ -25,7 +25,10 @@ const personagens = [];
 const planetas = [];
 const naves = [];
 const veiculos = [];
-const especies = []
+const especies = [];
+
+const params = new URLSearchParams(window.location.search)
+const consultaAPI = params.get('tipo')
 const lista = document.querySelector('.lista-personagens');
 
 
