@@ -21,6 +21,13 @@ const planetasFilmes = [];
 const navesFilmes = [];
 const veiculosFilmes = [];
 const especiesFilmes = [];
+const personagens = [];
+const planetas = [];
+const naves = [];
+const veiculos = [];
+const especies = []
+const lista = document.querySelector('.lista-personagens');
+
 
 
 const apiKey = `https://swapi.dev/api/${consultaAPI}/`;
@@ -30,75 +37,82 @@ function formatarData(dataISO) {
     return data.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
 }
 
+async function fetchLocalStorage(chave, url) {
+    const cache = localStorage.getItem(chave);
+    if (cache) {
+        return JSON.parse(cache)
+    }
+    const response = await fetch(url);
+    const data = await response.json()
 
-fetch(apiKey)
-    .then(response => response.json())
-    .then(data => {
-        const contador = data.count;
-        const lista = document.querySelector('.lista-personagens');
+    localStorage.setItem(chave, JSON.stringify(data))
+    return data;
+}
 
-        const personagens = []; // guarda objetos completos
-        const planetas = [];
-        const naves = [];
-        const veiculos = [];
-        const filmes = [];
-        const especies = [];
+async function carregarTodos(consultaAPI) {
+    let url = `https://swapi.dev/api/${consultaAPI}/`;
+    const chaveCache = `cache_${consultaAPI}`
 
-        async function carregarTodos(consultaAPI) {
-            let url = `https://swapi.dev/api/${consultaAPI}/`;
-            const resultados = [];
+    const cache = localStorage.getItem(chaveCache)
+    if (cache) {
+        return JSON.parse(cache)
+    }
+    const resultados = [];
 
-            while (url) {
-                const response = await fetch(url);
-                const data = await response.json();
+    while (url) {
+        const response = await fetch(url);
+        const data = await response.json();
 
-                resultados.push(...data.results);
-                url = data.next;
-            }
+        resultados.push(...data.results);
+        url = data.next;
+    }
 
-            return resultados;
+    localStorage.setItem(chaveCache, JSON.stringify(resultados))
+    return resultados;
+}
+
+async function getCount(apiKey) {
+    const response = await fetch(apiKey)
+    const data = await response.json()
+    const count = data.count
+    return count
+}
+//getCount(apiKey).then(count=>console.log(count))
+
+async function Consulta(linkConsulta, consultaAPI) {
+    const jsonResposta = await fetchLocalStorage(`item_${linkConsulta}`, linkConsulta);
+
+    if (consultaAPI === 'people') {
+        // Consultas Planeta
+        const jsonPlanet = await fetchLocalStorage(`planet_${jsonResposta.homeworld}`, jsonResposta.homeworld)
+        jsonResposta.homeworld = jsonPlanet.name
+
+        // Consultas Espécie
+        if (jsonResposta.species.length > 0) {
+            const Specie = await fetchLocalStorage(`specie_${jsonResposta.species[0]}`, jsonResposta.species[0]); // pega a primeira espécie
+            jsonResposta.species = Specie.name
+        } else {
+            jsonResposta.species = 'Desconhecida';
         }
 
+        // guarda personagem
+        personagens.push(jsonResposta);
 
-        async function Consulta(linkConsulta, consultaAPI) {
-            const response = await fetch(linkConsulta);
-            const jsonResposta = await response.json();
+        // ordena por nome
+        personagens.sort((a, b) => a.name.localeCompare(b.name));
 
-            if (consultaAPI === 'people') {
-                // Consultas Planeta
-                const responsePlanet = await fetch(jsonResposta.homeworld);
-                const jsonPlanet = await responsePlanet.json();
-                jsonResposta.homeworld = jsonPlanet.name;
+        // re-renderiza lista
+        lista.innerHTML = '';
+        for (let personagem of personagens) {
+            const li = document.createElement('li');
+            li.innerText = personagem.name;
+            li.setAttribute('class', 'item');
 
-                // Consultas Espécie
-                if (jsonResposta.species.length > 0) {
-                    const responseSpecie = await fetch(jsonResposta.species[0]); // pega a primeira espécie
-                    const jsonSpecie = await responseSpecie.json();
-                    jsonResposta.species = jsonSpecie.name;
-                } else {
-                    jsonResposta.species = 'Desconhecida';
-                }
+            li.addEventListener('click', async () => {
+                const listaPessoal = document.querySelector('.listaPessoal');
+                const listaAdicional = document.querySelector('.adicional');
 
-
-
-                // guarda personagem
-                personagens.push(jsonResposta);
-
-                // ordena por nome
-                personagens.sort((a, b) => a.name.localeCompare(b.name));
-
-                // re-renderiza lista
-                lista.innerHTML = '';
-                for (let personagem of personagens) {
-                    const li = document.createElement('li');
-                    li.innerText = personagem.name;
-                    li.setAttribute('class', 'item');
-
-                    li.addEventListener('click', async () => {
-                        const listaPessoal = document.querySelector('.listaPessoal');
-                        const listaAdicional = document.querySelector('.adicional');
-
-                        listaPessoal.innerHTML = `
+                listaPessoal.innerHTML = `
                             <li>
                                 <strong>Nome:</strong> ${personagem.name}<br>
                                 <strong>Altura:</strong> ${personagem.height} cm<br>
@@ -113,64 +127,60 @@ fetch(apiKey)
                             </li>
                             `;
 
-                        //Limpa Arrays pro proximo personagem
-                        VeiculosPersonagens.length = 0;
-                        filmes.length = 0;
-                        NavesPersonagens.length = 0;
+                //Limpa Arrays pro proximo personagem
+                VeiculosPersonagens.length = 0;
+                filmes.length = 0;
+                NavesPersonagens.length = 0;
 
-                        //Consulta Filmes
-                        for (let linkFilme of personagem.films) {
-                            const responseFilme = await fetch(linkFilme);
-                            const filme = await responseFilme.json();
-                            filmes.push(filme.title);
-                        }
-                        //Consultas Veículos
-                        for (let linkVeiculo of personagem.vehicles) {
-                            const responseVehicles = await fetch(linkVeiculo);
-                            const veiculo = await responseVehicles.json();
-                            VeiculosPersonagens.push(veiculo.name);
-                        }
+                //Consulta Filmes
+                for (let linkFilme of personagem.films) {
+                    const filme = await fetchLocalStorage(`filme_${linkFilme}`, linkFilme)
+                    filmes.push(filme.title)
+                }
+                //Consultas Veículos
+                for (let linkVeiculo of personagem.vehicles) {
+                    const veiculo = await fetchLocalStorage(`veiculo_${linkVeiculo}`, linkVeiculo)
+                    VeiculosPersonagens.push(veiculo.name);
+                }
 
-                        //Consultas naves
-                        for (let linkNave of personagem.starships) {
-                            const responseStarships = await fetch(linkNave);
-                            const nave = await responseStarships.json();
-                            NavesPersonagens.push(nave.name);
-                        }
+                //Consultas naves
+                for (let linkNave of personagem.starships) {
+                    const nave = await fetchLocalStorage(`nave_${linkNave}`, linkNave)
+                    NavesPersonagens.push(nave.name);
+                }
 
 
-                        listaAdicional.innerHTML = `
+                listaAdicional.innerHTML = `
                         <li>
                         <strong>Filmes:</strong>
                         ${filmes.map(filme => `<li>${filme}</li>`).join('')}
                         <br>
                         <strong>Veículos:</strong>
-                        ${VeiculosPersonagens.length > 0 ? VeiculosPersonagens.map(veiculo => `<li>${veiculo}</li>`).join('') : 'Não tem'}
+                        ${VeiculosPersonagens.length > 0 ? VeiculosPersonagens.map(veiculo => `<li>${veiculo}</li>`).join('') : 'Não tem<br>'}
                         <br>
                         <strong>Naves:</strong>
-                        ${NavesPersonagens.length > 0 ? NavesPersonagens.map(nave => `<li>${nave}</li>`).join('') : 'Não tem'}
+                        ${NavesPersonagens.length > 0 ? NavesPersonagens.map(nave => `<li>${nave}</li>`).join('') : 'Não tem<br>'}
                         </li>
                         `;
-                    });
+            });
 
-                    lista.appendChild(li);
-                }
-            } else if (consultaAPI === 'planets') {
+            lista.appendChild(li);
+        }
+    } else if (consultaAPI === 'planets') {
+        planetas.push(jsonResposta);
+        planetas.sort((a, b) => a.name.localeCompare(b.name))
 
-                planetas.push(jsonResposta);
-                planetas.sort((a, b) => a.name.localeCompare(b.name))
+        lista.innerHTML = ''
+        for (let planeta of planetas) {
 
-                lista.innerHTML = ''
-                for (let planeta of planetas) {
+            const li = document.createElement('li');
+            li.innerText = planeta.name;
+            li.setAttribute('class', 'item');
+            li.addEventListener("click", async () => {
+                const listaPessoal = document.querySelector('.listaPessoal');
+                const listaAdicional = document.querySelector('.adicional');
 
-                    const li = document.createElement('li');
-                    li.innerText = planeta.name;
-                    li.setAttribute('class', 'item');
-                    li.addEventListener("click", async () => {
-                        const listaPessoal = document.querySelector('.listaPessoal');
-                        const listaAdicional = document.querySelector('.adicional');
-
-                        listaPessoal.innerHTML = `
+                listaPessoal.innerHTML = `
                             <li>
                                 <strong>Nome:</strong> ${planeta.name}<br>
                                 <strong>Período de rotação:</strong> ${planeta.rotation_period} horas<br>
@@ -184,22 +194,20 @@ fetch(apiKey)
                             </li>
                         `;
 
-                        residentesPlanetas.length = 0
-                        filmes.length = 0
+                residentesPlanetas.length = 0
+                filmes.length = 0
 
-                        for (let linkResidentes of planeta.residents) {
-                            const responseResidents = await fetch(linkResidentes)
-                            const residents = await responseResidents.json()
-                            residentesPlanetas.push(residents.name)
-                        }
+                for (let linkResidentes of planeta.residents) {
+                    const residents = await fetchLocalStorage(`people_${linkResidentes}`, linkResidentes)
+                    residentesPlanetas.push(residents.name)
+                }
 
-                        for (let linkFilme of planeta.films) {
-                            const responseFilme = await fetch(linkFilme)
-                            const filme = await responseFilme.json()
-                            filmes.push(filme.title)
-                        }
+                for (let linkFilme of planeta.films) {
+                    const filme = await fetchLocalStorage(`filme_${linkFilme}`, linkFilme)
+                    filmes.push(filme.title)
+                }
 
-                        listaAdicional.innerHTML = `
+                listaAdicional.innerHTML = `
                             <li>
                             <strong>Residentes:</strong><br>
                             ${residentesPlanetas.length > 0 ? residentesPlanetas.map(residente => `<li>${residente}</li>`).join('') : 'Não tem'}
@@ -211,22 +219,22 @@ fetch(apiKey)
                         
                         `
 
-                    })
-                    lista.append(li)
+            })
+            lista.append(li)
 
-                }
-            } else if (consultaAPI === 'starships') {
-                naves.push(jsonResposta)
-                naves.sort((a, b) => a.name.localeCompare(b.name))
-                lista.innerHTML = ''
-                for (let nave of naves) {
-                    const li = document.createElement('li');
-                    li.innerText = nave.name;
-                    li.setAttribute('class', 'item');
-                    li.addEventListener("click", async () => {
-                        const listaPessoal = document.querySelector('.listaPessoal');
-                        const listaAdicional = document.querySelector('.adicional');
-                        listaPessoal.innerHTML = `
+        }
+    } else if (consultaAPI === 'starships') {
+        naves.push(jsonResposta)
+        naves.sort((a, b) => a.name.localeCompare(b.name))
+        lista.innerHTML = ''
+        for (let nave of naves) {
+            const li = document.createElement('li');
+            li.innerText = nave.name;
+            li.setAttribute('class', 'item');
+            li.addEventListener("click", async () => {
+                const listaPessoal = document.querySelector('.listaPessoal');
+                const listaAdicional = document.querySelector('.adicional');
+                listaPessoal.innerHTML = `
                                 <li>
                                     <strong>Nome:</strong> ${nave.name}<br>
                                     <strong>Modelo:</strong> ${nave.model}<br>
@@ -243,22 +251,20 @@ fetch(apiKey)
                                     <strong>Classe da nave:</strong> ${nave.starship_class}<br>
                                 </li>
                             `;
-                        pilotos.length = 0
-                        filmes.length = 0;
+                pilotos.length = 0
+                filmes.length = 0;
 
-                        for (let linkFilme of nave.films) {
-                            const responseFilme = await fetch(linkFilme)
-                            const filme = await responseFilme.json()
-                            filmes.push(filme.title)
-                        }
+                for (let linkFilme of nave.films) {
+                    const filme = await fetchLocalStorage(`filme_${linkFilme}`, linkFilme)
+                    filmes.push(filme.title)
+                }
 
-                        for (let linkPiloto of nave.pilots) {
-                            const responsePiloto = await fetch(linkPiloto)
-                            const piloto = await responsePiloto.json()
-                            pilotos.push(piloto.name)
-                        }
+                for (let linkPiloto of nave.pilots) {
+                    const piloto = await fetchLocalStorage(`people_${linkPiloto}`, linkPiloto)
+                    pilotos.push(piloto.name)
+                }
 
-                        listaAdicional.innerHTML = `
+                listaAdicional.innerHTML = `
                             <li>
                             <strong>Pilotos:</strong><br>
                             ${pilotos.length > 0 ? pilotos.map(piloto => `<li>${piloto}</li>`).join('') : 'Não tem<br>'}
@@ -269,21 +275,21 @@ fetch(apiKey)
                             <\li>
                         `
 
-                    })
-                lista.append(li)
-                }
-            } else if (consultaAPI === 'vehicles') {
-                veiculos.push(jsonResposta)
-                veiculos.sort((a, b) => a.name.localeCompare(b.name))
-                lista.innerHTML = ''
-                for (let veiculo of veiculos) {
-                    const li = document.createElement('li');
-                    li.innerText = veiculo.name;
-                    li.setAttribute('class', 'item');
-                    li.addEventListener("click", async () => {
-                        const listaPessoal = document.querySelector('.listaPessoal');
-                        const listaAdicional = document.querySelector('.adicional');
-                        listaPessoal.innerHTML = `
+            })
+            lista.append(li)
+        }
+    } else if (consultaAPI === 'vehicles') {
+        veiculos.push(jsonResposta)
+        veiculos.sort((a, b) => a.name.localeCompare(b.name))
+        lista.innerHTML = ''
+        for (let veiculo of veiculos) {
+            const li = document.createElement('li');
+            li.innerText = veiculo.name;
+            li.setAttribute('class', 'item');
+            li.addEventListener("click", async () => {
+                const listaPessoal = document.querySelector('.listaPessoal');
+                const listaAdicional = document.querySelector('.adicional');
+                listaPessoal.innerHTML = `
                             <li>
                                 <strong>Nome:</strong> ${veiculo.name}<br>
                                 <strong>Modelo:</strong> ${veiculo.model}<br>
@@ -299,22 +305,20 @@ fetch(apiKey)
                             </li>
                         `;
 
-                        pilotos.length = 0
-                        filmes.length = 0;
+                pilotos.length = 0
+                filmes.length = 0;
 
-                        for (let linkFilme of veiculo.films) {
-                            const responseFilme = await fetch(linkFilme)
-                            const filme = await responseFilme.json()
-                            filmes.push(filme.title)
-                        }
+                for (let linkFilme of veiculo.films) {
+                    const filme = await fetchLocalStorage(`filme_${linkFilme}`, linkFilme)
+                    filmes.push(filme.title)
+                }
 
-                        for (let linkPiloto of veiculo.pilots) {
-                            const responsePiloto = await fetch(linkPiloto)
-                            const piloto = await responsePiloto.json()
-                            pilotos.push(piloto.name)
-                        }
+                for (let linkPiloto of veiculo.pilots) {
+                    const piloto = await fetchLocalStorage(`people_${linkPiloto}`, linkPiloto)
+                    pilotos.push(piloto.name)
+                }
 
-                        listaAdicional.innerHTML = `
+                listaAdicional.innerHTML = `
                             <li>
                             <strong>Pilotos:</strong><br>
                             ${pilotos.length > 0 ? pilotos.map(piloto => `<li>${piloto}</li>`).join('') : 'Não tem<br>'}
@@ -324,22 +328,22 @@ fetch(apiKey)
                             <br>
                             <\li>
                         `
-                    })
-                    lista.append(li)
-                }
-                
-            } else if (consultaAPI === 'films') {
-                filmes.push(jsonResposta)
-                filmes.sort((a, b) => a.title.localeCompare(b.title))
-                lista.innerHTML = ''
-                for (let filme of filmes) {
-                    const li = document.createElement('li');
-                    li.innerText = filme.title;
-                    li.setAttribute('class', 'item');
-                    li.addEventListener("click", async () => {
-                        const listaPessoal = document.querySelector('.listaPessoal');
-                        const listaAdicional = document.querySelector('.adicional');
-                        listaPessoal.innerHTML = `
+            })
+            lista.append(li)
+        }
+
+    } else if (consultaAPI === 'films') {
+        filmes.push(jsonResposta)
+        filmes.sort((a, b) => a.title.localeCompare(b.title))
+        lista.innerHTML = ''
+        for (let filme of filmes) {
+            const li = document.createElement('li');
+            li.innerText = filme.title;
+            li.setAttribute('class', 'item');
+            li.addEventListener("click", async () => {
+                const listaPessoal = document.querySelector('.listaPessoal');
+                const listaAdicional = document.querySelector('.adicional');
+                listaPessoal.innerHTML = `
                             <li>
                                 <strong>Título:</strong> ${filme.title}<br>
                                 <strong>Episódio:</strong> ${filme.episode_id}<br>
@@ -351,43 +355,38 @@ fetch(apiKey)
                             </li>
                         `;
 
-                        personagensFilmes.length = 0
-                        planetasFilmes.length = 0
-                        navesFilmes.length = 0
-                        veiculosFilmes.length = 0
-                        especiesFilmes.length = 0
-                        
-                        for (let linkPersonagem of filme.characters) {
-                            const responsePersonagem = await fetch(linkPersonagem)
-                            const personagem = await responsePersonagem.json()
-                            personagensFilmes.push(personagem.name)
-                        }
+                personagensFilmes.length = 0
+                planetasFilmes.length = 0
+                navesFilmes.length = 0
+                veiculosFilmes.length = 0
+                especiesFilmes.length = 0
 
-                        for (let linkPlaneta of filme.planets) {
-                            const responsePlanet = await fetch(linkPlaneta)
-                            const planeta = await responsePlanet.json()
-                            planetasFilmes.push(planeta.name)
-                        }
+                for (let linkPersonagem of filme.characters) {
+                    const personagem = await fetchLocalStorage(`people_${linkPersonagem}`, linkPersonagem)
+                    personagensFilmes.push(personagem.name)
+                }
 
-                        for (let linkNaves of filme.starships){
-                            const responseNave = await fetch(linkNaves)
-                            const nave = await responseNave.json()
-                            navesFilmes.push(nave.name)
-                        }
+                for (let linkPlaneta of filme.planets) {
+                    const planeta = await fetchLocalStorage(`planet_${linkPlaneta}`, linkPlaneta)
+                    planetasFilmes.push(planeta.name)
+                }
 
-                        for (let linkVeiculo of filme.vehicles) {
-                            const responseVeiculo = await fetch(linkVeiculo)
-                            const veiculo = await responseVeiculo.json()
-                            veiculosFilmes.push(veiculo.name)
-                        }
+                for (let linkNaves of filme.starships) {
+                    const nave = await fetchLocalStorage(`nave_${linkNaves}`, linkNaves)
+                    navesFilmes.push(nave.name)
+                }
 
-                        for (let linkEspecie of filme.species) {
-                            const responseEspecie = await fetch(linkEspecie)
-                            const especie = await responseEspecie.json()
-                            especiesFilmes.push(especie.name)
-                        }
+                for (let linkVeiculo of filme.vehicles) {
+                    const veiculo = await fetchLocalStorage(`veiculo_${linkVeiculo}`, linkVeiculo)
+                    veiculosFilmes.push(veiculo.name)
+                }
 
-                        listaAdicional.innerHTML = `
+                for (let linkEspecie of filme.species) {
+                    const especie = await fetchLocalStorage(`specie_${linkEspecie}`, linkEspecie)
+                    especiesFilmes.push(especie.name)
+                }
+
+                listaAdicional.innerHTML = `
                             <li>
                             <strong>Personagens :</strong><br>
                             ${personagensFilmes.length > 0 ? personagensFilmes.map(personagens => `<li>${personagens}</li>`).join('') : 'Não tem<br>'}
@@ -408,12 +407,12 @@ fetch(apiKey)
                         `
 
 
-                    })
-                    lista.append(li)
-                }
-            } else if (consultaAPI === 'species') {
+            })
+            lista.append(li)
+        }
+    }else if (consultaAPI === 'species') {
                 const responsePlanet = await fetch(jsonResposta.homeworld);
-                const jsonPlanet = await responsePlanet.json();
+                const jsonPlanet = await fetchLocalStorage(`planet_${jsonResposta.homeworld}`, jsonResposta.homeworld);
                 jsonResposta.homeworld = jsonPlanet.name;
 
                 especies.push(jsonResposta)
@@ -445,14 +444,12 @@ fetch(apiKey)
                         filmes.length = 0;
 
                         for (let linkFilme of especie.films) {
-                            const responseFilme = await fetch(linkFilme)
-                            const filme = await responseFilme.json()
+                            const filme = await fetchLocalStorage(`filme_${linkFilme}`, linkFilme)
                             filmes.push(filme.title)
                         }
 
                         for (let linkPiloto of especie.people) {
-                            const responsePiloto = await fetch(linkPiloto)
-                            const piloto = await responsePiloto.json()
+                            const piloto = await fetchLocalStorage(`people_${linkPiloto}`, linkPiloto)
                             pilotos.push(piloto.name)
                         }
 
@@ -471,6 +468,14 @@ fetch(apiKey)
                     lista.append(li)
                 }
             }
+}
+
+carregarTodos(consultaAPI).then(async (todos) => {
+    await Promise.all(todos.map(item => Consulta(item.url, consultaAPI)));
+});
+
+/* 
+       
         }
 
 
@@ -494,8 +499,4 @@ fetch(apiKey)
             }
         })
 
-    })
-
-    .catch(error =>
-        console.error("Erro: ", error)
-    )
+    }) */
