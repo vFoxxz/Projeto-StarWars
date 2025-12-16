@@ -11,11 +11,11 @@ const camposPessoais = [
 ];
 
 const generoMap = {
-  male: "Masculino",
-  female: "Feminino",
-  "n/a": "N/A",
-  none: "Nenhum",
-  hermaphrodite: "Hermafrodita"
+    male: "Masculino",
+    female: "Feminino",
+    "n/a": "N/A",
+    none: "Nenhum",
+    hermaphrodite: "Hermafrodita"
 };
 
 
@@ -96,8 +96,8 @@ async function getCount(apiKey) {
 async function Consulta(linkConsulta, consultaAPI) {
     const jsonResposta = await fetchLocalStorage(`item_${linkConsulta}`, linkConsulta);
 
-        
-    
+
+
     if (consultaAPI === 'people') {
         // Consultas Planeta
 
@@ -123,7 +123,7 @@ async function Consulta(linkConsulta, consultaAPI) {
         for (let personagem of personagens) {
             const div = document.createElement('div');
             div.setAttribute('class', 'catalogo');
-            div.innerHTML='';
+            div.innerHTML = '';
             div.innerHTML = `
                                 ${personagem.name}
                                 <br>
@@ -133,12 +133,12 @@ async function Consulta(linkConsulta, consultaAPI) {
                                      <span class="linha-raca"> <span class="raca"> Raça: </span> ${personagem.species === 'Human' ? 'Humano' : personagem.species} </span>
                                 </div>
                             `;
-            
+
             div.setAttribute('data-bs-target', '#exampleModalCenter');
             div.setAttribute('data-bs-toggle', 'modal');
-            
+
             div.addEventListener('click', async () => {
-                
+
                 const listaPessoal = document.querySelector('.modal-body');
 
                 //Limpa Arrays pro proximo personagem
@@ -188,7 +188,7 @@ async function Consulta(linkConsulta, consultaAPI) {
                                 ${NavesPersonagens.length > 0 ? NavesPersonagens.map(nave => `<li>${nave}</li>`).join('') : 'Não tem<br>'}
                             `;
 
-                
+
 
 
             });
@@ -200,30 +200,25 @@ async function Consulta(linkConsulta, consultaAPI) {
         planetas.push(jsonResposta);
         planetas.sort((a, b) => a.name.localeCompare(b.name))
 
-        lista.innerHTML = ''
         containerLista.innerHTML = '';
         for (let planeta of planetas) {
+            const div = document.createElement('div');
+            div.setAttribute('class', 'catalogo');
+            div.innerHTML = '';
+            div.innerHTML = `
+                                ${planeta.name}
+                                <br>
+                                <div class="info-card"> 
+                                     <br>
+                                     <span class="linha-raca"> <span class="raca"> População: </span> ${planeta.population === 'unknown' ? "Desconhecido" : planeta.population} </span>
+                                </div>
+                            `;
 
-            const li = document.createElement('li');
-            li.innerText = planeta.name;
-            li.setAttribute('class', 'item');
-            li.addEventListener("click", async () => {
-                const listaPessoal = document.querySelector('.listaPessoal');
-                const listaAdicional = document.querySelector('.adicional');
+            div.setAttribute('data-bs-target', '#exampleModalCenter');
+            div.setAttribute('data-bs-toggle', 'modal');
 
-                listaPessoal.innerHTML = `
-                            <li>
-                                <strong>Nome:</strong> ${planeta.name}<br>
-                                <strong>Período de rotação:</strong> ${planeta.rotation_period} horas<br>
-                                <strong>Período orbital:</strong> ${planeta.orbital_period} dias<br>
-                                <strong>Diâmetro:</strong> ${planeta.diameter} km<br>
-                                <strong>Clima:</strong> ${planeta.climate}<br>
-                                <strong>Gravidade:</strong> ${planeta.gravity}<br>
-                                <strong>Terreno:</strong> ${planeta.terrain}<br>
-                                <strong>Água na superfície:</strong> ${planeta.surface_water}%<br>
-                                <strong>População:</strong> ${planeta.population} habitantes<br>
-                            </li>
-                        `;
+            div.addEventListener("click", async () => {
+                const listaPessoal = document.querySelector('.modal-body');
 
                 residentesPlanetas.length = 0
                 filmes.length = 0
@@ -238,20 +233,36 @@ async function Consulta(linkConsulta, consultaAPI) {
                     filmes.push(filme.title)
                 }
 
-                listaAdicional.innerHTML = `
-                            <li>
-                            <strong>Residentes:</strong><br>
-                            ${residentesPlanetas.length > 0 ? residentesPlanetas.map(residente => `<li>${residente}</li>`).join('') : 'Não tem'}
-                            <br>
-                            <strong>Filmes:</strong><br>
-                            ${filmes.map(filme => `<li>${filme}</li>`).join('')}
-                            <br>
-                            </li>
+                listaPessoal.innerHTML = `
+                      
+                                <strong>Nome:</strong> ${planeta.name}<br>
+                                <strong>Período de rotação:</strong> ${planeta.rotation_period} horas<br>
+                                <strong>Período orbital:</strong> ${planeta.orbital_period} dias<br>
+                                <strong>Diâmetro:</strong> ${planeta.diameter} km<br>
+                                <strong>Clima:</strong> ${planeta.climate}<br>
+                                <strong>Gravidade:</strong> ${planeta.gravity}<br>
+                                <strong>Terreno:</strong> ${planeta.terrain}<br>
+                                <strong>Água na superfície:</strong> ${planeta.surface_water}%<br>
+                                <strong>População:</strong> ${planeta.population} habitantes<br>
+                                <hr>
+                                <strong> Informações adicionais </strong>
+                                <br>
+                                <br>
+                                <strong>Residentes:</strong><br>
+                                ${residentesPlanetas.length > 0 ? residentesPlanetas.map(residente => `<li>${residente}</li>`).join('') : 'Não tem'}
+                                <br>
+                                <strong>Filmes:</strong><br>
+                                ${filmes.map(filme => `<li>${filme}</li>`).join('')}
+                                <br>
                         
-                        `
+                        `;
+
+
+
+
 
             })
-            lista.append(li)
+            containerLista.append(div)
 
         }
     } else if (consultaAPI === 'starships') {
@@ -259,16 +270,42 @@ async function Consulta(linkConsulta, consultaAPI) {
         inputPesquisa.setAttribute('placeholder', 'Pesquisar naves...')
         naves.push(jsonResposta)
         naves.sort((a, b) => a.name.localeCompare(b.name))
-        lista.innerHTML = ''
+        containerLista.innerHTML = ''
         for (let nave of naves) {
-            const li = document.createElement('li');
-            li.innerText = nave.name;
-            li.setAttribute('class', 'item');
-            li.addEventListener("click", async () => {
-                const listaPessoal = document.querySelector('.listaPessoal');
-                const listaAdicional = document.querySelector('.adicional');
+            const div = document.createElement('div');
+            div.setAttribute('class', 'catalogo');
+            div.innerHTML = '';
+            div.innerHTML = `
+                                ${nave.name}
+                                <br>
+                                <div class="info-card"> 
+                                     <br>
+                                     <span class="linha-raca"> <span class="raca"> Custo: </span> ${nave.cost_in_credits === "unknown" ? "Desconhecido" : nave.cost_in_credits} </span><br>
+                                     <span class="linha-raca"> <span class="raca"> Comprimento: </span> ${nave.length} Metros</span>
+                                     
+                                </div>
+                            `;
+
+            div.setAttribute('data-bs-target', '#exampleModalCenter');
+            div.setAttribute('data-bs-toggle', 'modal');
+
+            div.addEventListener("click", async () => {
+                const listaPessoal = document.querySelector('.modal-body');
+
+                pilotos.length = 0
+                filmes.length = 0;
+
+                for (let linkFilme of nave.films) {
+                    const filme = await fetchLocalStorage(`filme_${linkFilme}`, linkFilme)
+                    filmes.push(filme.title)
+                }
+
+                for (let linkPiloto of nave.pilots) {
+                    const piloto = await fetchLocalStorage(`people_${linkPiloto}`, linkPiloto)
+                    pilotos.push(piloto.name)
+                }
                 listaPessoal.innerHTML = `
-                                <li>
+                                
                                     <strong>Nome:</strong> ${nave.name}<br>
                                     <strong>Modelo:</strong> ${nave.model}<br>
                                     <strong>Fabricante:</strong> ${nave.manufacturer}<br>
@@ -282,63 +319,49 @@ async function Consulta(linkConsulta, consultaAPI) {
                                     <strong>Classificação do hiperdrive:</strong> ${nave.hyperdrive_rating}<br>
                                     <strong>MGLT:</strong> ${nave.MGLT}<br>
                                     <strong>Classe da nave:</strong> ${nave.starship_class}<br>
-                                </li>
+                                    <hr>
+                                    <strong> Informações adicionais </strong>
+                                    <br>
+                                    <br>
+                                    <strong>Pilotos:</strong><br>
+                                    ${pilotos.length > 0 ? pilotos.map(piloto => `<li>${piloto}</li>`).join('') : 'Não tem<br>'}
+                                    <br>
+                                    <strong>Filmes:</strong><br>
+                                    ${filmes.map(filme => `<li>${filme}</li>`).join('')}
+                                    <br>
+                                
                             `;
-                pilotos.length = 0
-                filmes.length = 0;
 
-                for (let linkFilme of nave.films) {
-                    const filme = await fetchLocalStorage(`filme_${linkFilme}`, linkFilme)
-                    filmes.push(filme.title)
-                }
 
-                for (let linkPiloto of nave.pilots) {
-                    const piloto = await fetchLocalStorage(`people_${linkPiloto}`, linkPiloto)
-                    pilotos.push(piloto.name)
-                }
-
-                listaAdicional.innerHTML = `
-                            <li>
-                            <strong>Pilotos:</strong><br>
-                            ${pilotos.length > 0 ? pilotos.map(piloto => `<li>${piloto}</li>`).join('') : 'Não tem<br>'}
-                            <br>
-                            <strong>Filmes:</strong><br>
-                            ${filmes.map(filme => `<li>${filme}</li>`).join('')}
-                            <br>
-                            <\li>
-                        `
 
             })
-            lista.append(li)
+            containerLista.append(div)
         }
     } else if (consultaAPI === 'vehicles') {
         tituloLista.textContent = 'Lista de veículos';
         inputPesquisa.setAttribute('placeholder', 'Pesquisar veículos...')
         veiculos.push(jsonResposta)
         veiculos.sort((a, b) => a.name.localeCompare(b.name))
-        lista.innerHTML = ''
+        containerLista.innerHTML = ''
         for (let veiculo of veiculos) {
-            const li = document.createElement('li');
-            li.innerText = veiculo.name;
-            li.setAttribute('class', 'item');
-            li.addEventListener("click", async () => {
-                const listaPessoal = document.querySelector('.listaPessoal');
-                const listaAdicional = document.querySelector('.adicional');
-                listaPessoal.innerHTML = `
-                            <li>
-                                <strong>Nome:</strong> ${veiculo.name}<br>
-                                <strong>Modelo:</strong> ${veiculo.model}<br>
-                                <strong>Fabricante:</strong> ${veiculo.manufacturer}<br>
-                                <strong>Custo:</strong> ${veiculo.cost_in_credits} créditos<br>
-                                <strong>Comprimento:</strong> ${veiculo.length} metros<br>
-                                <strong>Velocidade atmosférica máxima:</strong> ${veiculo.max_atmosphering_speed} km/h<br>
-                                <strong>Tripulação:</strong> ${veiculo.crew} pessoas<br>
-                                <strong>Passageiros:</strong> ${veiculo.passengers}<br>
-                                <strong>Capacidade de carga:</strong> ${veiculo.cargo_capacity} kg<br>
-                                <strong>Consumíveis:</strong> ${veiculo.consumables}<br>
-                                <strong>Classe do veículo:</strong> ${veiculo.vehicle_class}<br>
-                            </li>
-                        `;
+            const div = document.createElement('div');
+            div.setAttribute('class', 'catalogo');
+            div.innerHTML = '';
+            div.innerHTML = `
+                                ${veiculo.name}
+                                <br>
+                                <div class="info-card"> 
+                                     <br>
+                                     <span class="linha-raca"> <span class="raca"> Custo: </span> ${veiculo.cost_in_credits === "unknown" ? "Desconhecido" : veiculo.cost_in_credits} </span><br>
+                                     <span class="linha-raca"> <span class="raca"> Velocidade: </span> ${veiculo.max_atmosphering_speed} KM/H</span>
+                                     
+                                </div>
+                            `;
+
+            div.setAttribute('data-bs-target', '#exampleModalCenter');
+            div.setAttribute('data-bs-toggle', 'modal');
+            div.addEventListener("click", async () => {
+                const listaPessoal = document.querySelector('.modal-body');
 
                 pilotos.length = 0
                 filmes.length = 0;
@@ -353,18 +376,35 @@ async function Consulta(linkConsulta, consultaAPI) {
                     pilotos.push(piloto.name)
                 }
 
-                listaAdicional.innerHTML = `
-                            <li>
-                            <strong>Pilotos:</strong><br>
-                            ${pilotos.length > 0 ? pilotos.map(piloto => `<li>${piloto}</li>`).join('') : 'Não tem<br>'}
-                            <br>
-                            <strong>Filmes:</strong><br>
-                            ${filmes.map(filme => `<li>${filme}</li>`).join('')}
-                            <br>
-                            <\li>
-                        `
+                listaPessoal.innerHTML = `
+                                <strong>Nome:</strong> ${veiculo.name}<br>
+                                <strong>Modelo:</strong> ${veiculo.model}<br>
+                                <strong>Fabricante:</strong> ${veiculo.manufacturer}<br>
+                                <strong>Custo:</strong> ${veiculo.cost_in_credits} créditos<br>
+                                <strong>Comprimento:</strong> ${veiculo.length} metros<br>
+                                <strong>Velocidade atmosférica máxima:</strong> ${veiculo.max_atmosphering_speed} km/h<br>
+                                <strong>Tripulação:</strong> ${veiculo.crew} pessoas<br>
+                                <strong>Passageiros:</strong> ${veiculo.passengers}<br>
+                                <strong>Capacidade de carga:</strong> ${veiculo.cargo_capacity} kg<br>
+                                <strong>Consumíveis:</strong> ${veiculo.consumables}<br>
+                                <strong>Classe do veículo:</strong> ${veiculo.vehicle_class}<br>
+                                <hr>
+                                <strong> Informações adicionais </strong>
+                                <br>
+                                <br>
+                                <strong>Pilotos:</strong><br>
+                                ${pilotos.length > 0 ? pilotos.map(piloto => `<li>${piloto}</li>`).join('') : 'Não tem<br>'}
+                                <br>
+                                <strong>Filmes:</strong><br>
+                                ${filmes.map(filme => `<li>${filme}</li>`).join('')}
+                                <br>
+                        `;
+
+
+
+
             })
-            lista.append(li)
+            containerLista.append(div)
         }
 
     } else if (consultaAPI === 'films') {
@@ -372,25 +412,26 @@ async function Consulta(linkConsulta, consultaAPI) {
         inputPesquisa.setAttribute('placeholder', 'Pesquisar filmes...')
         filmes.push(jsonResposta)
         filmes.sort((a, b) => a.title.localeCompare(b.title))
-        lista.innerHTML = ''
+        containerLista.innerHTML = ''
         for (let filme of filmes) {
-            const li = document.createElement('li');
-            li.innerText = filme.title;
-            li.setAttribute('class', 'item');
-            li.addEventListener("click", async () => {
-                const listaPessoal = document.querySelector('.listaPessoal');
-                const listaAdicional = document.querySelector('.adicional');
-                listaPessoal.innerHTML = `
-                            <li>
-                                <strong>Título:</strong> ${filme.title}<br>
-                                <strong>Episódio:</strong> ${filme.episode_id}<br>
-                                <strong>Diretor:</strong> ${filme.director}<br>
-                                <strong>Produtor(es):</strong> ${filme.producer}<br>
-                                <strong>Data de lançamento:</strong> ${formatarData(filme.release_date)}<br>
-                                <strong>Abertura:</strong><br>
-                                <pre>${filme.opening_crawl}</pre>
-                            </li>
-                        `;
+            const div = document.createElement('div');
+            div.setAttribute('class', 'catalogo');
+            div.innerHTML = '';
+            div.innerHTML = `
+                                ${filme.title}
+                                <br>
+                                <div class="info-card"> 
+                                     <br>
+                                     <span class="linha-raca"> <span class="raca"> Episódio: </span> ${filme.episode_id} </span><br>
+                                     <span class="linha-raca"> <span class="raca"> Data de lançamento: </span> ${formatarData(filme.release_date)}</span>
+                                     
+                                </div>
+                            `;
+
+            div.setAttribute('data-bs-target', '#exampleModalCenter');
+            div.setAttribute('data-bs-toggle', 'modal');
+            div.addEventListener("click", async () => {
+                const listaPessoal = document.querySelector('.modal-body');
 
                 personagensFilmes.length = 0
                 planetasFilmes.length = 0
@@ -422,30 +463,44 @@ async function Consulta(linkConsulta, consultaAPI) {
                     const especie = await fetchLocalStorage(`specie_${linkEspecie}`, linkEspecie)
                     especiesFilmes.push(especie.name)
                 }
-
-                listaAdicional.innerHTML = `
+                listaPessoal.innerHTML = `
                             <li>
-                            <strong>Personagens :</strong><br>
-                            ${personagensFilmes.length > 0 ? personagensFilmes.map(personagens => `<li>${personagens}</li>`).join('') : 'Não tem<br>'}
-                            <br>
-                            <strong>Planetas :</strong><br>
-                            ${planetasFilmes.length > 0 ? planetasFilmes.map(planetas => `<li>${planetas}</li>`).join('') : 'Não tem<br>'}
-                            <br>
-                            <strong>Naves :</strong><br>
-                            ${navesFilmes.length > 0 ? navesFilmes.map(naves => `<li>${naves}</li>`).join('') : 'Não tem<br>'}
-                            <br>
-                            <strong>Veiculos :</strong><br>
-                            ${veiculosFilmes.length > 0 ? veiculosFilmes.map(veiculos => `<li>${veiculos}</li>`).join('') : 'Não tem<br>'}
-                            <br>
-                            <strong>Especies :</strong><br>
-                            ${especiesFilmes.length > 0 ? especiesFilmes.map(especies => `<li>${especies}</li>`).join('') : 'Não tem<br>'}
-                            <br>
-                            <\li>
-                        `
+                                <strong>Título:</strong> ${filme.title}<br>
+                                <strong>Episódio:</strong> ${filme.episode_id}<br>
+                                <strong>Diretor:</strong> ${filme.director}<br>
+                                <strong>Produtor(es):</strong> ${filme.producer}<br>
+                                <strong>Data de lançamento:</strong> ${formatarData(filme.release_date)}<br>
+                                <strong>Abertura:</strong><br>
+                                <pre>${filme.opening_crawl}</pre>
+                                <hr>
+                                <strong> Informações adicionais </strong>
+                                <br>
+                                <br>
+                                <strong>Personagens :</strong><br>
+                                ${personagensFilmes.length > 0 ? personagensFilmes.map(personagens => `<li>${personagens}</li>`).join('') : 'Não tem<br>'}
+                                <br>
+                                <strong>Planetas :</strong><br>
+                                ${planetasFilmes.length > 0 ? planetasFilmes.map(planetas => `<li>${planetas}</li>`).join('') : 'Não tem<br>'}
+                                <br>
+                                <strong>Naves :</strong><br>
+                                ${navesFilmes.length > 0 ? navesFilmes.map(naves => `<li>${naves}</li>`).join('') : 'Não tem<br>'}
+                                <br>
+                                <strong>Veiculos :</strong><br>
+                                ${veiculosFilmes.length > 0 ? veiculosFilmes.map(veiculos => `<li>${veiculos}</li>`).join('') : 'Não tem<br>'}
+                                <br>
+                                <strong>Especies :</strong><br>
+                                ${especiesFilmes.length > 0 ? especiesFilmes.map(especies => `<li>${especies}</li>`).join('') : 'Não tem<br>'}
+                                <br>
+                            </li>
+                        `;
+
+                
+
+                
 
 
             })
-            lista.append(li)
+            containerLista.append(div)
         }
     } else if (consultaAPI === 'species') {
         tituloLista.textContent = 'Lista de espécies';
@@ -455,28 +510,26 @@ async function Consulta(linkConsulta, consultaAPI) {
 
         especies.push(jsonResposta)
         especies.sort((a, b) => a.name.localeCompare(b.name))
-        lista.innerHTML = ''
+        containerLista.innerHTML = ''
         for (let especie of especies) {
-            const li = document.createElement('li');
-            li.innerText = especie.name;
-            li.setAttribute('class', 'item');
-            li.addEventListener("click", async () => {
-                const listaPessoal = document.querySelector('.listaPessoal');
-                const listaAdicional = document.querySelector('.adicional');
-                listaPessoal.innerHTML = `
-                            <li>
-                                <strong>Nome:</strong> ${especie.name}<br>
-                                <strong>Classificação:</strong> ${especie.classification}<br>
-                                <strong>Designação:</strong> ${especie.designation}<br>
-                                <strong>Altura média:</strong> ${especie.average_height} cm<br>
-                                <strong>Cores de pele:</strong> ${especie.skin_colors}<br>
-                                <strong>Cores de cabelo:</strong> ${especie.hair_colors}<br>
-                                <strong>Cores de olhos:</strong> ${especie.eye_colors}<br>
-                                <strong>Expectativa de vida:</strong> ${especie.average_lifespan} anos<br>
-                                <strong>Planeta natal:</strong> ${especie.homeworld}<br>
-                                <strong>Linguagem:</strong> ${especie.language}<br>
-                            </li>
-                        `;
+            const div = document.createElement('div');
+            div.setAttribute('class', 'catalogo');
+            div.innerHTML = '';
+            div.innerHTML = `
+                                ${especie.name}
+                                <br>
+                                <div class="info-card"> 
+                                     <br>
+                                     <span class="linha-raca"> <span class="raca"> Altura média: </span> ${especie.average_height} CM</span><br>
+                                     <span class="linha-raca"> <span class="raca"> Linguagem: </span> ${especie.language}</span>
+                                     
+                                </div>
+                            `;
+
+            div.setAttribute('data-bs-target', '#exampleModalCenter');
+            div.setAttribute('data-bs-toggle', 'modal');
+            div.addEventListener("click", async () => {
+                const listaPessoal = document.querySelector('.modal-body');
 
                 pilotos.length = 0
                 filmes.length = 0;
@@ -490,20 +543,36 @@ async function Consulta(linkConsulta, consultaAPI) {
                     const piloto = await fetchLocalStorage(`people_${linkPiloto}`, linkPiloto)
                     pilotos.push(piloto.name)
                 }
+                listaPessoal.innerHTML = `
+                            
+                                <strong>Nome:</strong> ${especie.name}<br>
+                                <strong>Classificação:</strong> ${especie.classification}<br>
+                                <strong>Designação:</strong> ${especie.designation}<br>
+                                <strong>Altura média:</strong> ${especie.average_height} cm<br>
+                                <strong>Cores de pele:</strong> ${especie.skin_colors}<br>
+                                <strong>Cores de cabelo:</strong> ${especie.hair_colors}<br>
+                                <strong>Cores de olhos:</strong> ${especie.eye_colors}<br>
+                                <strong>Expectativa de vida:</strong> ${especie.average_lifespan} anos<br>
+                                <strong>Planeta natal:</strong> ${especie.homeworld}<br>
+                                <strong>Linguagem:</strong> ${especie.language}<br>
+                                <hr>
+                                <strong> Informações adicionais </strong>
+                                <br>
+                                <br>
+                                <strong>Pessoas:</strong><br>
+                                ${pilotos.length > 0 ? pilotos.map(piloto => `<li>${piloto}</li>`).join('') : 'Não tem<br>'}
+                                <br>
+                                <strong>Filmes:</strong><br>
+                                ${filmes.map(filme => `<li>${filme}</li>`).join('')}
+                                <br>
+                            
+                        `;
 
-                listaAdicional.innerHTML = `
-                            <li>
-                            <strong>Pessoas:</strong><br>
-                            ${pilotos.length > 0 ? pilotos.map(piloto => `<li>${piloto}</li>`).join('') : 'Não tem<br>'}
-                            <br>
-                            <strong>Filmes:</strong><br>
-                            ${filmes.map(filme => `<li>${filme}</li>`).join('')}
-                            <br>
-                            <\li>
-                        `
+                
+
 
             })
-            lista.append(li)
+            containerLista.append(div)
         }
     }
 }
