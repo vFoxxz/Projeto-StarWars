@@ -2,6 +2,10 @@
     font-family: 'font-galaxy';
     src: url('../src/font/SF\ Distant\ Galaxy.ttf');
 }
+@font-face{
+  font-family: 'serifgothic-bold';
+  src: url('../src/font/ITC\ SerifGothicBold.ttf');
+}
 body {
   margin: 0;
   overflow: hidden;

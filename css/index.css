@@ -8,9 +8,14 @@ body {
     src: url('../src/font/SF\ Distant\ Galaxy.ttf');
 }
 
-@font-face {
-  font-family: 'londrina';
-  src: url('../src/font/LondrinaSolid-Regular.otf');
+
+@font-face{
+  font-family: 'serifgothic';
+  src: url('../src/font/ITC\ SerifGothic.ttf');
+}
+@font-face{
+  font-family: 'serifgothic-bold';
+  src: url('../src/font/ITC\ SerifGothicBold.ttf');
 }
 
 body.dark-mode {
@@ -48,14 +53,21 @@ body.dark-mode .faixa-principal {
     border-radius: 10px;
     color: black;
     background-color: #c3d8f1;
-    font-family: 'font-galaxy';
+    
+    h3{
+      font-family: 'serifgothic-bold';
+    }
+    
     h1{
       font-weight: lighter;
       margin-top: 5px;
+      font-family: 'font-galaxy';
     }
-    h3{
-      font-weight: lighter;
-    }
+    
+}
+
+body.dark-mode .introducao-principal h3{
+      margin-top: -5px;
 }
 
 .introducao-texto{
@@ -78,7 +90,7 @@ body.dark-mode .faixa-principal {
 
   p{
     font-size: 2rem;
-    font-family: 'londrina';
+    font-family: 'serifgothic-bold';
   }
 }
 
@@ -96,16 +108,17 @@ body.dark-mode .simbolo {
 .gif{
   background-image: url('../src/gif/AnakinGIF.gif');
   width: 540px;
-  height: 384px;
+  height: 360px;
   border-radius: 10px;
 }
 
 body.dark-mode .gif{
+  background-repeat: no-repeat;
   background-image: url('../src/gif/DarthVaderGIF.gif');
 }
 
 h2{
-  font-family: 'londrina';
+  font-family: 'serifgothic-bold';
   font-size: 2rem;
 }
 
