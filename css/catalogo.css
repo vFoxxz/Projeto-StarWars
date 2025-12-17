@@ -92,7 +92,6 @@ body.dark-mode .catalogo {
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: calc(25% - 20px);
-    /* 5 cards por linha com gap */
     padding: 10px;
     font-size: 2.5vh;
     font-family: 'serifgothic-bold';
@@ -101,6 +100,13 @@ body.dark-mode .catalogo {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .catalogo {
+        width: calc(50% - 20px);
+    }
 }
 
 .catalogo:hover {
@@ -164,4 +170,8 @@ body.dark-mode .modal-content {
         height: 2px;
         background-color: white;
     }
+}
+
+body.dark-mode .btn-close {
+    filter: invert(1);
 }

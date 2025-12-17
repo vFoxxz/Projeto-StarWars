@@ -51,8 +51,12 @@ function formatarData(dataISO) {
     return data.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
 }
 
-function formatarValor(pop) {
-    const numero = Number(pop);
+function formatarValor(valor) {
+    if (valor === "unknown" || valor === "n/a" || valor === null) {
+        return "Desconhecido";
+    }
+
+    const numero = Number(valor.replace(/,/g, ""));
     return numero.toLocaleString("pt-BR");
 }
 
@@ -385,7 +389,7 @@ async function Consulta(linkConsulta, consultaAPI) {
                                 <strong>Comprimento:</strong> ${veiculo.length === "unknown" ? "Desconhecido" : `${formatarValor(veiculo.length)} metros`}<br>
                                 <strong>Velocidade atmosférica máxima:</strong> ${veiculo.max_atmosphering_speed === "unknown" ? "Desconhecido" : `${formatarValor(veiculo.max_atmosphering_speed)} km/h`}<br>
                                 <strong>Tripulação:</strong> ${veiculo.crew === "unknown" ? "Desconhecido" : `${formatarValor(veiculo.crew) >1 ? `${formatarValor(veiculo.crew)} pessoas` : `${formatarValor(veiculo.crew)} pessoa`} `}<br>
-                                <strong>Passageiros:</strong> ${veiculo.passengers === "unknown" ? "Desconhecido" : veiculo.passengers}<br>
+                                <strong>Passageiros:</strong> ${veiculo.passengers === "unknown" ? "Desconhecido" : formatarValor(veiculo.passengers)}<br>
                                 <strong>Capacidade de carga:</strong> ${veiculo.cargo_capacity === "unknown" ? "Desconhecido" : `${veiculo.cargo_capacity} kg`}<br>
                                 <strong>Consumíveis:</strong> ${veiculo.consumables === "unknown" ? "Desconhecido" : veiculo.consumables}<br>
                                 <strong>Classe do veículo:</strong> ${veiculo.vehicle_class === "unknown" ? "Desconhecido" : veiculo.vehicle_class}<br>
