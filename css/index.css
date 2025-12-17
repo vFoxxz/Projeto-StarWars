@@ -1,3 +1,4 @@
+/* Base */
 body {
     background-color: white;
     overflow-x: hidden;
@@ -8,8 +9,6 @@ body {
     font-family: 'font-galaxy';
     src: url('../src/font/SF\ Distant\ Galaxy.ttf');
 }
-
-
 @font-face{
   font-family: 'serifgothic';
   src: url('../src/font/ITC\ SerifGothic.ttf');
@@ -20,10 +19,11 @@ body {
 }
 
 body.dark-mode {
-  background-color: #272626; /* fundo escuro */
-  color: #ffffff; /* texto claro */
+  background-color: #272626;
+  color: #ffffff;
 }
 
+/* Faixa principal */
 .faixa-principal {
     background-image: url('../src/img/AnakinCapa.png');
     background-repeat: no-repeat;
@@ -37,67 +37,53 @@ body.dark-mode {
     height: 40rem;
     outline: 2px solid #6ca5f0;
 }
-
 body.dark-mode .faixa-principal {
   background-image: url('../src/img/DarthVaderCapa.png');
   outline: 2px solid #6b0f0f;
   margin-top: -5px;
 }
 
+/* Introdução */
 .introducao-principal {
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
     padding: 2rem;
-    margin: 10px 10px;
+    margin: 10px;
     border-radius: 10px;
     color: black;
     background-color: #c3d8f1;
-    
-    h3{
-      font-family: 'serifgothic-bold';
-    }
-    
-    h1{
-      font-weight: lighter;
-      margin-top: 5px;
-      font-family: 'font-galaxy';
-    }
-    
+    text-align: center;
+}
+.introducao-principal h3 {
+    font-family: 'serifgothic-bold';
+}
+.introducao-principal h1 {
+    font-weight: lighter;
+    margin-top: 5px;
+    font-family: 'font-galaxy';
+}
+body.dark-mode .introducao-principal {
+    background-color: #5e0505;
+    color: #ffffff;
+}
+body.dark-mode .introducao-principal h3 {
+    margin-top: -5px;
 }
 
-body.dark-mode .introducao-principal h3{
-      margin-top: -5px;
-}
-
-.introducao-texto{
+/* Texto */
+.introducao-texto {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
-  
-  
-  .simbolo{
-    align-items: center;
-    justify-content: center;
+}
+.introducao-texto .simbolo {
     background-image: url('../src/img/simbolojedi.png');
     background-repeat: no-repeat;
     background-size: contain;
     width: 11vh;
     height: 11vh;
-  }
-
-  p{
-    font-size: 2rem;
-    font-family: 'serifgothic-bold';
-  }
-}
-
-body.dark-mode .introducao-principal {
-    background-color: #5e0505;
-    color: #ffffff;
 }
 body.dark-mode .simbolo {
     width: 15vh;
@@ -105,36 +91,123 @@ body.dark-mode .simbolo {
     margin-top: -15px;
     background-image: url('../src/img/simbolo_imperio.png');
 }
-
-.gif{
-  background-image: url('../src/gif/AnakinGIF.gif');
-  width: 540px;
-  height: 360px;
-  border-radius: 10px;
+.introducao-texto p {
+    font-size: 1.5rem;
+    font-family: 'serifgothic-bold';
+    line-height: 1.4;
+    max-width: 900px;
 }
 
-body.dark-mode .gif{
+/* GIF */
+.gif {
+  background-image: url('../src/gif/AnakinGIF.gif');
   background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  max-width: 540px;
+  height: auto;
+  aspect-ratio: 3/2;
+  border-radius: 10px;
+}
+body.dark-mode .gif {
   background-image: url('../src/gif/DarthVaderGIF.gif');
 }
 
-h2{
+/* Frase final */
+h2 {
   font-family: 'serifgothic-bold';
   font-size: 2rem;
 }
-
-.div-frase{
+.div-frase {
   display: flex;
   align-items: center;
-  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
 }
-.SoleLua{
+.SoleLua {
   width: 40px;
   height: 40px;
   margin-left: 15px;
 }
 
-footer{
+/* Footer */
+footer {
   margin: 0;
 }
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+.footer-lista {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+}
+.footer-lista li a {
+  text-decoration: none;
+  color: inherit;
+  font-family: 'serifgothic';
+}
 
+
+@media (max-width: 1024px) {
+  .faixa-principal {
+    height: 30rem;
+  }
+  .introducao-texto p {
+    font-size: 1.3rem;
+  }
+  h2 {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .faixa-principal {
+    height: 20rem;
+    outline: none;
+  }
+  .introducao-principal {
+    padding: 1rem;
+    margin: 5px;
+  }
+  .introducao-texto p {
+    font-size: 1.1rem;
+  }
+  .gif {
+    max-width: 100%;
+    aspect-ratio: 16/9;
+  }
+  h2 {
+    font-size: 1.4rem;
+  }
+  .SoleLua {
+    width: 30px;
+    height: 30px;
+  }
+  .footer-lista {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .faixa-principal {
+    height: 15rem;
+  }
+  .introducao-texto p {
+    font-size: 1rem;
+  }
+  h2 {
+    font-size: 1.2rem;
+  }
+  .gif {
+    aspect-ratio: 4/3;
+  }
+}

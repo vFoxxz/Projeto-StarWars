@@ -1,15 +1,18 @@
 @font-face {
-    font-family: 'font-galaxy';
-    src: url('../src/font/SF\ Distant\ Galaxy.ttf');
+  font-family: 'font-galaxy';
+  src: url('../src/font/SF\ Distant\ Galaxy.ttf');
 }
-@font-face{
+
+@font-face {
   font-family: 'serifgothic-bold';
   src: url('../src/font/ITC\ SerifGothicBold.ttf');
 }
+
 body {
   margin: 0;
-  overflow: hidden;
+  overflow-y: hidden;
 }
+
 :root {
   --noise-bg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.7'/%3E%3C/svg%3E");
 
@@ -17,7 +20,7 @@ body {
 }
 
 
-header{
+header {
   position: relative;
   z-index: 0;
 }
@@ -41,83 +44,111 @@ header::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    ellipse at center 80%,
-    rgba(90, 129, 230, 0.3) 0%,
-    transparent 60%
-  );
+  background: radial-gradient(ellipse at center 80%,
+      rgba(90, 129, 230, 0.3) 0%,
+      transparent 60%);
   pointer-events: none;
   z-index: -1;
   mix-blend-mode: normal;
 }
 
 body.dark-mode header::after {
-  background: radial-gradient(
-    ellipse at center 80%,
-    rgba(247, 13, 13, 0.3) 0%,
-    transparent 60%
-  );
+  background: radial-gradient(ellipse at center 80%,
+      rgba(247, 13, 13, 0.3) 0%,
+      transparent 60%);
   background-color: #353434;
 }
 
 
 .header-cima {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 2vh 2vw;
-    min-height: 20vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2vh 2vw;
+  min-height: 60vh;
 }
-.center-logo{
-    margin-top: 10px;
-    margin-right: 2.5%;
-    z-index: 0;
+
+.center-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .left-space {
-    width: 30%;
+  flex: 1 1 0;
+  min-width: 1px;
 }
 
 .logo-star {
-    width: 30%;
+  width: clamp(160px, 18vw, 320px);
+  max-width: 100%;
+  height: auto;
 }
 
 .dark-button {
-    background: transparent;
-    border: none;
-    outline: none;
+  position: absolute;
+  right: 2vw;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logo-dark {
-  width: 50%;
+  width: 3vw;
+  height: auto;
+  transform-origin: center;
   transform: translateY(40%);
 }
+
 .header-menu {
-    width: 100%;
-    padding: 1.5vh 2vw;
+  width: 100%;
+  padding: 1.5vh 2vw;
+  margin-top: calc(20vh * 0.1);
+  /* evita sobreposição em alguns casos */
 }
+
 .navbar-nav {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .nav-item .nav-link {
-    color: #353434;
-    font-family: 'font-galaxy';
+  color: #353434;
+  font-family: 'font-galaxy';
 }
+
 body.dark-mode .nav-link {
   color: #ffffff;
 }
-.nav-item{
-    padding: 0px 15px;
+
+.nav-item {
+  padding: 0px 15px;
+}
+
+header,
+.header-cima,
+.center-logo,
+.dark-button {
+  box-sizing: border-box;
 }
 
 #sabre {
   transition: transform 0.6s ease;
   transform-origin: 50% 50%;
-  position: relative; 
+  position: relative;
 }
 
 #sabre.rotacionado {
@@ -128,6 +159,73 @@ body.dark-mode .nav-link {
   transition: opacity 0.4s ease;
   opacity: 1;
 }
+
 .logo-dark.fade-out {
   opacity: 0;
+}
+
+@media (min-width: 1200px) {
+  .logo-star {
+    width: 8vw;
+  }
+}
+
+@media (min-width: 1600px) {
+  .logo-star {
+    width: 8vw;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  .header-cima {
+    min-height: 60vh;
+    padding: 3vh 3vw;
+  }
+
+  .logo-star {
+    width: clamp(130px, 14vw, 300px);
+    margin-top: 40vh;
+  }
+
+  .logo-dark{
+    width: 6vw;
+    margin-top: 20vh;
+  }
+
+  .dark-button {
+    right: 3vw;
+    /* mais folga à direita em telas maiores */
+  }
+}
+
+@media (max-width: 600px) {
+  .logo-star {
+    max-width: 200px;
+    width: 30vw;
+    margin-top: 50vh;
+  }
+
+  .logo-dark {
+    width: 10vw;
+    margin-top: 22vh;
+  }
+
+  .left-space {
+    display: none;
+  }
+
+  .header-cima {
+    min-height: 60vh;
+  }
+}
+
+@media (max-width: 400px) {
+  .logo-star {
+    max-width: 160px;
+    width: 40vw;
+  }
+
+  .logo-dark {
+    width: 15vw;
+  }
 }
