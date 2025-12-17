@@ -85,12 +85,7 @@ async function carregarTodos(consultaAPI) {
     return resultados;
 }
 
-async function getCount(apiKey) {
-    const response = await fetch(apiKey)
-    const data = await response.json()
-    const count = data.count
-    return count
-}
+
 //getCount(apiKey).then(count=>console.log(count))
 
 async function Consulta(linkConsulta, consultaAPI) {
