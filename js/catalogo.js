@@ -52,11 +52,19 @@ function formatarData(dataISO) {
 }
 
 function formatarValor(valor) {
-    if (valor === "unknown" || valor === "n/a" || valor === null) {
+    if (!valor || valor === "unknown" || valor === "n/a") {
         return "Desconhecido";
     }
 
+    if (valor.includes("-")) {
+        return valor;
+    }
+
     const numero = Number(valor.replace(/,/g, ""));
+    if (isNaN(numero)) {
+        return "Desconhecido";
+    }
+
     return numero.toLocaleString("pt-BR");
 }
 
@@ -169,8 +177,8 @@ async function Consulta(linkConsulta, consultaAPI) {
                 }
 
                 listaPessoal.innerHTML = `
-                                <strong>Nome:</strong> ${personagem.name === "unknown" ? "Desconhecido" :personagem.name }<br>
-                                <strong>Altura:</strong> ${personagem.height === "unknown" ? "Desconhecido" : `${personagem.height} cm` } <br>
+                                <strong>Nome:</strong> ${personagem.name === "unknown" ? "Desconhecido" : personagem.name}<br>
+                                <strong>Altura:</strong> ${personagem.height === "unknown" ? "Desconhecido" : `${personagem.height} cm`} <br>
                                 <strong>Peso:</strong> ${personagem.mass === "unknown" ? "Desconhecido" : `${personagem.mass} KG`} <br>
                                 <strong>Cabelo:</strong> ${personagem.hair_color === "unknown" ? "Desconhecido" : personagem.hair_color}<br>
                                 <strong>Pele:</strong> ${personagem.skin_color === "unknown" ? "Desconhecido" : personagem.skin_color}<br>
@@ -316,9 +324,12 @@ async function Consulta(linkConsulta, consultaAPI) {
                                     <strong>Fabricante:</strong> ${nave.manufacturer === "unknown" ? "Desconhecido" : nave.manufacturer}<br>
                                     <strong>Custo:</strong> ${nave.cost_in_credits === "unknown" ? "Desconhecido" : `${formatarValor(nave.cost_in_credits)} crédito`}<br>
                                     <strong>Comprimento:</strong> ${nave.length === "unknown" ? "Desconhecido" : `${formatarValor(nave.length)} metros`}<br>
-                                    <strong>Velocidade atmosférica máxima:</strong> ${nave.max_atmosphering_speed === "unknown" ? "Desconhecido" : `${formatarValor(nave.max_atmosphering_speed)} km/h`}<br>
-                                    <strong>Tripulação:</strong> ${nave.crew === "unknown" ? "Desconhecido" : `${formatarValor(nave.crew) >1 ? `${formatarValor(nave.crew)} pessoas` : `${formatarValor(nave.crew)} pessoa`} `}<br>
-                                    <strong>Passageiros:</strong> ${nave.passengers === "unknown" ? "Desconhecido" : formatarValor(nave.passengers)}<br>
+                                    <strong>Velocidade atmosférica máxima:</strong> ${formatarValor(nave.max_atmosphering_speed) === "Desconhecido" ? "Desconhecido" : `${nave.max_atmosphering_speed} km/h`}<br>
+                                    <strong>Tripulação:</strong> ${formatarValor
+                                    (nave.crew) === "Desconhecido" ? "Desconhecido" : `${formatarValor
+                                    (nave.crew)} ${formatarValor(nave.crew).includes("-") ? "pessoas" : (Number(nave.crew.replace(/,/g, "")) > 1 ? "pessoas" : "pessoa")}`}<br>
+                                    <strong>Passageiros:</strong> ${formatarValor
+                                    (nave.passengers)}<br>
                                     <strong>Capacidade de carga:</strong> ${nave.cargo_capacity === "unknown" ? "Desconhecido" : `${formatarValor(nave.cargo_capacity)} kg`}<br>
                                     <strong>Consumíveis:</strong> ${nave.consumables === "unknown" ? "Desconhecido" : nave.consumables}<br>
                                     <strong>Classificação do hiperdrive:</strong> ${nave.hyperdrive_rating === "unknown" ? "Desconhecido" : formatarValor(nave.hyperdrive_rating)}<br>
@@ -383,12 +394,12 @@ async function Consulta(linkConsulta, consultaAPI) {
 
                 listaPessoal.innerHTML = `
                                 <strong>Nome:</strong> ${veiculo.name === "unknown" ? "Desconhecido" : veiculo.name}<br>
-                                <strong>Modelo:</strong> ${veiculo.model === "unknown" ? "Desconhecido" :veiculo.model}<br>
+                                <strong>Modelo:</strong> ${veiculo.model === "unknown" ? "Desconhecido" : veiculo.model}<br>
                                 <strong>Fabricante:</strong> ${veiculo.manufacturer === "unknown" ? "Desconhecido" : veiculo.manufacturer}<br>
                                 <strong>Custo:</strong> ${veiculo.cost_in_credits === "unknown" ? "Desconhecido" : `${formatarValor(veiculo.cost_in_credits)} créditos`}<br>
                                 <strong>Comprimento:</strong> ${veiculo.length === "unknown" ? "Desconhecido" : `${formatarValor(veiculo.length)} metros`}<br>
                                 <strong>Velocidade atmosférica máxima:</strong> ${veiculo.max_atmosphering_speed === "unknown" ? "Desconhecido" : `${formatarValor(veiculo.max_atmosphering_speed)} km/h`}<br>
-                                <strong>Tripulação:</strong> ${veiculo.crew === "unknown" ? "Desconhecido" : `${formatarValor(veiculo.crew) >1 ? `${formatarValor(veiculo.crew)} pessoas` : `${formatarValor(veiculo.crew)} pessoa`} `}<br>
+                                <strong>Tripulação:</strong> ${veiculo.crew === "unknown" ? "Desconhecido" : `${formatarValor(veiculo.crew) > 1 ? `${formatarValor(veiculo.crew)} pessoas` : `${formatarValor(veiculo.crew)} pessoa`} `}<br>
                                 <strong>Passageiros:</strong> ${veiculo.passengers === "unknown" ? "Desconhecido" : formatarValor(veiculo.passengers)}<br>
                                 <strong>Capacidade de carga:</strong> ${veiculo.cargo_capacity === "unknown" ? "Desconhecido" : `${veiculo.cargo_capacity} kg`}<br>
                                 <strong>Consumíveis:</strong> ${veiculo.consumables === "unknown" ? "Desconhecido" : veiculo.consumables}<br>
@@ -499,9 +510,9 @@ async function Consulta(linkConsulta, consultaAPI) {
                             </li>
                         `;
 
-                
 
-                
+
+
 
 
             })
@@ -573,7 +584,7 @@ async function Consulta(linkConsulta, consultaAPI) {
                             
                         `;
 
-                
+
 
 
             })
