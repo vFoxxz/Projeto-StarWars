@@ -51,6 +51,12 @@ function formatarData(dataISO) {
     return data.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
 }
 
+function formatarValor(pop) {
+    const numero = Number(pop);
+    return numero.toLocaleString("pt-BR");
+}
+
+
 async function fetchLocalStorage(chave, url) {
     const cache = localStorage.getItem(chave);
     if (cache) {
@@ -159,22 +165,22 @@ async function Consulta(linkConsulta, consultaAPI) {
                 }
 
                 listaPessoal.innerHTML = `
-                                <strong>Nome:</strong> ${personagem.name}<br>
-                                <strong>Altura:</strong> ${personagem.height} cm<br>
-                                <strong>Peso:</strong> ${personagem.mass} kg<br>
-                                <strong>Cabelo:</strong> ${personagem.hair_color}<br>
-                                <strong>Pele:</strong> ${personagem.skin_color}<br>
-                                <strong>Olhos:</strong> ${personagem.eye_color}<br>
-                                <strong>Nascimento:</strong> ${personagem.birth_year}<br>
-                                <strong>Gênero:</strong> ${personagem.gender}<br>
-                                <strong>Planeta:</strong> ${personagem.homeworld}<br>
-                                <strong>Espécie: </strong> ${personagem.species}<br> 
+                                <strong>Nome:</strong> ${personagem.name === "unknown" ? "Desconhecido" :personagem.name }<br>
+                                <strong>Altura:</strong> ${personagem.height === "unknown" ? "Desconhecido" : `${personagem.height} cm` } <br>
+                                <strong>Peso:</strong> ${personagem.mass === "unknown" ? "Desconhecido" : `${personagem.mass} KG`} <br>
+                                <strong>Cabelo:</strong> ${personagem.hair_color === "unknown" ? "Desconhecido" : personagem.hair_color}<br>
+                                <strong>Pele:</strong> ${personagem.skin_color === "unknown" ? "Desconhecido" : personagem.skin_color}<br>
+                                <strong>Olhos:</strong> ${personagem.eye_color === "unknown" ? "Desconhecido" : personagem.eye_color}<br>
+                                <strong>Nascimento:</strong> ${personagem.birth_year === "unknown" ? "Desconhecido" : personagem.birth_year}<br>
+                                <strong>Gênero:</strong> ${personagem.gender === "unknown" ? "Desconhecido" : personagem.gender}<br>
+                                <strong>Planeta:</strong> ${personagem.homeworld === "unknown" ? "Desconhecido" : personagem.homeworld}<br>
+                                <strong>Espécie: </strong> ${personagem.species === "unknown" ? "Desconhecido" : personagem.species}<br> 
                                 <hr>
                                 <strong> Informações adicionais </strong>
                                 <br>
                                 <br>
                                 <strong>Filmes:</strong>
-                                ${filmes.map(filme => `<li>${filme}</li>`).join('')}
+                                ${filmes.length > 0 ? filmes.map(filme => `<li>${filme}</li>`).join('') : 'Não tem<br>'}
                                 <br>
                                 <strong>Veículos:</strong>
                                 ${VeiculosPersonagens.length > 0 ? VeiculosPersonagens.map(veiculo => `<li>${veiculo}</li>`).join('') : 'Não tem<br>'}
@@ -205,7 +211,7 @@ async function Consulta(linkConsulta, consultaAPI) {
                                 <br>
                                 <div class="info-card"> 
                                      <br>
-                                     <span class="linha-raca"> <span class="raca"> População: </span> ${planeta.population === 'unknown' ? "Desconhecido" : planeta.population} </span>
+                                     <span class="linha-raca"> <span class="raca"> População: </span> ${planeta.population === 'unknown' ? "Desconhecido" : formatarValor(planeta.population)} </span>
                                 </div>
                             `;
 
@@ -230,15 +236,15 @@ async function Consulta(linkConsulta, consultaAPI) {
 
                 listaPessoal.innerHTML = `
                       
-                                <strong>Nome:</strong> ${planeta.name}<br>
-                                <strong>Período de rotação:</strong> ${planeta.rotation_period} horas<br>
-                                <strong>Período orbital:</strong> ${planeta.orbital_period} dias<br>
-                                <strong>Diâmetro:</strong> ${planeta.diameter} km<br>
-                                <strong>Clima:</strong> ${planeta.climate}<br>
-                                <strong>Gravidade:</strong> ${planeta.gravity}<br>
-                                <strong>Terreno:</strong> ${planeta.terrain}<br>
-                                <strong>Água na superfície:</strong> ${planeta.surface_water}%<br>
-                                <strong>População:</strong> ${planeta.population} habitantes<br>
+                                <strong>Nome:</strong> ${planeta.name === "unknown" ? "Desconhecido" : planeta.name}<br>
+                                <strong>Período de rotação:</strong> ${planeta.rotation_period === "unknown" ? "Desconhecido" : planeta.rotation_period} horas<br>
+                                <strong>Período orbital:</strong> ${planeta.orbital_period === "unknown" ? "Desconhecido" : `${planeta.orbital_period} dias`} <br>
+                                <strong>Diâmetro:</strong> ${planeta.diameter === "unknown" ? "Desconhecido" : `${planeta.diameter} km`}<br>
+                                <strong>Clima:</strong> ${planeta.climate === "unknown" ? "Desconhecido" : planeta.climate}<br>
+                                <strong>Gravidade:</strong> ${planeta.gravity === "unknown" ? "Desconhecido" : planeta.gravity}<br>
+                                <strong>Terreno:</strong> ${planeta.terrain === "unknown" ? "Desconhecido" : planeta.terrain}<br>
+                                <strong>Água na superfície:</strong> ${planeta.surface_water === "unknown" ? "Desconhecido" : `${planeta.surface_water}%`}<br>
+                                <strong>População:</strong> ${planeta.population === "unknown" ? "Desconhecido" : `${formatarValor(planeta.population)} habitantes`} <br>
                                 <hr>
                                 <strong> Informações adicionais </strong>
                                 <br>
@@ -247,7 +253,7 @@ async function Consulta(linkConsulta, consultaAPI) {
                                 ${residentesPlanetas.length > 0 ? residentesPlanetas.map(residente => `<li>${residente}</li>`).join('') : 'Não tem'}
                                 <br>
                                 <strong>Filmes:</strong><br>
-                                ${filmes.map(filme => `<li>${filme}</li>`).join('')}
+                                ${filmes.length > 0 ? filmes.map(filme => `<li>${filme}</li>`).join('') : 'Não tem<br>'}
                                 <br>
                         
                         `;
@@ -275,8 +281,8 @@ async function Consulta(linkConsulta, consultaAPI) {
                                 <br>
                                 <div class="info-card"> 
                                      <br>
-                                     <span class="linha-raca"> <span class="raca"> Custo: </span> ${nave.cost_in_credits === "unknown" ? "Desconhecido" : nave.cost_in_credits} </span><br>
-                                     <span class="linha-raca"> <span class="raca"> Comprimento: </span> ${nave.length} Metros</span>
+                                     <span class="linha-raca"> <span class="raca"> Custo: </span> ${nave.cost_in_credits === "unknown" ? "Desconhecido" : formatarValor(nave.cost_in_credits)} </span><br>
+                                     <span class="linha-raca"> <span class="raca"> Comprimento: </span> ${nave.length === "unknown" ? "Desconhecido" : `${nave.length} Metros`}</span>
                                      
                                 </div>
                             `;
@@ -301,19 +307,19 @@ async function Consulta(linkConsulta, consultaAPI) {
                 }
                 listaPessoal.innerHTML = `
                                 
-                                    <strong>Nome:</strong> ${nave.name}<br>
-                                    <strong>Modelo:</strong> ${nave.model}<br>
-                                    <strong>Fabricante:</strong> ${nave.manufacturer}<br>
-                                    <strong>Custo:</strong> ${nave.cost_in_credits} créditos<br>
-                                    <strong>Comprimento:</strong> ${nave.length} metros<br>
-                                    <strong>Velocidade atmosférica máxima:</strong> ${nave.max_atmosphering_speed} km/h<br>
-                                    <strong>Tripulação:</strong> ${nave.crew} pessoas<br>
-                                    <strong>Passageiros:</strong> ${nave.passengers}<br>
-                                    <strong>Capacidade de carga:</strong> ${nave.cargo_capacity} kg<br>
-                                    <strong>Consumíveis:</strong> ${nave.consumables}<br>
-                                    <strong>Classificação do hiperdrive:</strong> ${nave.hyperdrive_rating}<br>
-                                    <strong>MGLT:</strong> ${nave.MGLT}<br>
-                                    <strong>Classe da nave:</strong> ${nave.starship_class}<br>
+                                    <strong>Nome:</strong> ${nave.name === "unknown" ? "Desconhecido" : nave.name}<br>
+                                    <strong>Modelo:</strong> ${nave.model === "unknown" ? "Desconhecido" : nave.model}<br>
+                                    <strong>Fabricante:</strong> ${nave.manufacturer === "unknown" ? "Desconhecido" : nave.manufacturer}<br>
+                                    <strong>Custo:</strong> ${nave.cost_in_credits === "unknown" ? "Desconhecido" : `${formatarValor(nave.cost_in_credits)} crédito`}<br>
+                                    <strong>Comprimento:</strong> ${nave.length === "unknown" ? "Desconhecido" : `${formatarValor(nave.length)} metros`}<br>
+                                    <strong>Velocidade atmosférica máxima:</strong> ${nave.max_atmosphering_speed === "unknown" ? "Desconhecido" : `${formatarValor(nave.max_atmosphering_speed)} km/h`}<br>
+                                    <strong>Tripulação:</strong> ${nave.crew === "unknown" ? "Desconhecido" : `${formatarValor(nave.crew) >1 ? `${formatarValor(nave.crew)} pessoas` : `${formatarValor(nave.crew)} pessoa`} `}<br>
+                                    <strong>Passageiros:</strong> ${nave.passengers === "unknown" ? "Desconhecido" : formatarValor(nave.passengers)}<br>
+                                    <strong>Capacidade de carga:</strong> ${nave.cargo_capacity === "unknown" ? "Desconhecido" : `${formatarValor(nave.cargo_capacity)} kg`}<br>
+                                    <strong>Consumíveis:</strong> ${nave.consumables === "unknown" ? "Desconhecido" : nave.consumables}<br>
+                                    <strong>Classificação do hiperdrive:</strong> ${nave.hyperdrive_rating === "unknown" ? "Desconhecido" : formatarValor(nave.hyperdrive_rating)}<br>
+                                    <strong>MGLT:</strong> ${nave.MGLT === "unknown" ? "Desconhecido" : formatarValor(nave.MGLT)}<br>
+                                    <strong>Classe da nave:</strong> ${nave.starship_class === "unknown" ? "Desconhecido" : nave.starship_class}<br>
                                     <hr>
                                     <strong> Informações adicionais </strong>
                                     <br>
@@ -322,7 +328,7 @@ async function Consulta(linkConsulta, consultaAPI) {
                                     ${pilotos.length > 0 ? pilotos.map(piloto => `<li>${piloto}</li>`).join('') : 'Não tem<br>'}
                                     <br>
                                     <strong>Filmes:</strong><br>
-                                    ${filmes.map(filme => `<li>${filme}</li>`).join('')}
+                                    ${filmes.length > 0 ? filmes.map(filme => `<li>${filme}</li>`).join('') : 'Não tem<br>'}
                                     <br>
                                 
                             `;
@@ -347,8 +353,8 @@ async function Consulta(linkConsulta, consultaAPI) {
                                 <br>
                                 <div class="info-card"> 
                                      <br>
-                                     <span class="linha-raca"> <span class="raca"> Custo: </span> ${veiculo.cost_in_credits === "unknown" ? "Desconhecido" : veiculo.cost_in_credits} </span><br>
-                                     <span class="linha-raca"> <span class="raca"> Velocidade: </span> ${veiculo.max_atmosphering_speed} KM/H</span>
+                                     <span class="linha-raca"> <span class="raca"> Custo: </span> ${veiculo.cost_in_credits === "unknown" ? "Desconhecido" : `${formatarValor(veiculo.cost_in_credits)}`} </span><br>
+                                     <span class="linha-raca"> <span class="raca"> Velocidade: </span> ${veiculo.max_atmosphering_speed === "unknown" ? "Desconhecido" : `${formatarValor(veiculo.max_atmosphering_speed)} km/h`}</span>
                                      
                                 </div>
                             `;
@@ -372,17 +378,17 @@ async function Consulta(linkConsulta, consultaAPI) {
                 }
 
                 listaPessoal.innerHTML = `
-                                <strong>Nome:</strong> ${veiculo.name}<br>
-                                <strong>Modelo:</strong> ${veiculo.model}<br>
-                                <strong>Fabricante:</strong> ${veiculo.manufacturer}<br>
-                                <strong>Custo:</strong> ${veiculo.cost_in_credits} créditos<br>
-                                <strong>Comprimento:</strong> ${veiculo.length} metros<br>
-                                <strong>Velocidade atmosférica máxima:</strong> ${veiculo.max_atmosphering_speed} km/h<br>
-                                <strong>Tripulação:</strong> ${veiculo.crew} pessoas<br>
-                                <strong>Passageiros:</strong> ${veiculo.passengers}<br>
-                                <strong>Capacidade de carga:</strong> ${veiculo.cargo_capacity} kg<br>
-                                <strong>Consumíveis:</strong> ${veiculo.consumables}<br>
-                                <strong>Classe do veículo:</strong> ${veiculo.vehicle_class}<br>
+                                <strong>Nome:</strong> ${veiculo.name === "unknown" ? "Desconhecido" : veiculo.name}<br>
+                                <strong>Modelo:</strong> ${veiculo.model === "unknown" ? "Desconhecido" :veiculo.model}<br>
+                                <strong>Fabricante:</strong> ${veiculo.manufacturer === "unknown" ? "Desconhecido" : veiculo.manufacturer}<br>
+                                <strong>Custo:</strong> ${veiculo.cost_in_credits === "unknown" ? "Desconhecido" : `${formatarValor(veiculo.cost_in_credits)} créditos`}<br>
+                                <strong>Comprimento:</strong> ${veiculo.length === "unknown" ? "Desconhecido" : `${formatarValor(veiculo.length)} metros`}<br>
+                                <strong>Velocidade atmosférica máxima:</strong> ${veiculo.max_atmosphering_speed === "unknown" ? "Desconhecido" : `${formatarValor(veiculo.max_atmosphering_speed)} km/h`}<br>
+                                <strong>Tripulação:</strong> ${veiculo.crew === "unknown" ? "Desconhecido" : `${formatarValor(veiculo.crew) >1 ? `${formatarValor(veiculo.crew)} pessoas` : `${formatarValor(veiculo.crew)} pessoa`} `}<br>
+                                <strong>Passageiros:</strong> ${veiculo.passengers === "unknown" ? "Desconhecido" : veiculo.passengers}<br>
+                                <strong>Capacidade de carga:</strong> ${veiculo.cargo_capacity === "unknown" ? "Desconhecido" : `${veiculo.cargo_capacity} kg`}<br>
+                                <strong>Consumíveis:</strong> ${veiculo.consumables === "unknown" ? "Desconhecido" : veiculo.consumables}<br>
+                                <strong>Classe do veículo:</strong> ${veiculo.vehicle_class === "unknown" ? "Desconhecido" : veiculo.vehicle_class}<br>
                                 <hr>
                                 <strong> Informações adicionais </strong>
                                 <br>
@@ -391,7 +397,7 @@ async function Consulta(linkConsulta, consultaAPI) {
                                 ${pilotos.length > 0 ? pilotos.map(piloto => `<li>${piloto}</li>`).join('') : 'Não tem<br>'}
                                 <br>
                                 <strong>Filmes:</strong><br>
-                                ${filmes.map(filme => `<li>${filme}</li>`).join('')}
+                                ${filmes.length > 0 ? filmes.map(filme => `<li>${filme}</li>`).join('') : 'Não tem<br>'}
                                 <br>
                         `;
 
@@ -460,13 +466,13 @@ async function Consulta(linkConsulta, consultaAPI) {
                 }
                 listaPessoal.innerHTML = `
                             <li>
-                                <strong>Título:</strong> ${filme.title}<br>
-                                <strong>Episódio:</strong> ${filme.episode_id}<br>
-                                <strong>Diretor:</strong> ${filme.director}<br>
-                                <strong>Produtor(es):</strong> ${filme.producer}<br>
+                                <strong>Título:</strong> ${filme.title === "unknown" ? "Desconhecido" : filme.title}<br>
+                                <strong>Episódio:</strong> ${filme.episode_id === "unknown" ? "Desconhecido" : filme.episode_id}<br>
+                                <strong>Diretor:</strong> ${filme.director === "unknown" ? "Desconhecido" : filme.director}<br>
+                                <strong>Produtor(es):</strong> ${filme.producer === "unknown" ? "Desconhecido" : filme.producer}<br>
                                 <strong>Data de lançamento:</strong> ${formatarData(filme.release_date)}<br>
                                 <strong>Abertura:</strong><br>
-                                <pre>${filme.opening_crawl}</pre>
+                                <pre>${filme.opening_crawl === "unknown" ? "Desconhecido" : filme.opening_crawl}</pre>
                                 <hr>
                                 <strong> Informações adicionais </strong>
                                 <br>
@@ -515,8 +521,8 @@ async function Consulta(linkConsulta, consultaAPI) {
                                 <br>
                                 <div class="info-card"> 
                                      <br>
-                                     <span class="linha-raca"> <span class="raca"> Altura média: </span> ${especie.average_height} CM</span><br>
-                                     <span class="linha-raca"> <span class="raca"> Linguagem: </span> ${especie.language}</span>
+                                     <span class="linha-raca"> <span class="raca"> Altura média: </span> ${especie.average_height === "unknown" ? "Desconhecido" : `${especie.average_height} cm`} </span><br>
+                                     <span class="linha-raca"> <span class="raca"> Linguagem: </span> ${especie.language === "unknown" ? "Desconhecido" : especie.language}</span>
                                      
                                 </div>
                             `;
@@ -540,16 +546,16 @@ async function Consulta(linkConsulta, consultaAPI) {
                 }
                 listaPessoal.innerHTML = `
                             
-                                <strong>Nome:</strong> ${especie.name}<br>
-                                <strong>Classificação:</strong> ${especie.classification}<br>
-                                <strong>Designação:</strong> ${especie.designation}<br>
-                                <strong>Altura média:</strong> ${especie.average_height} cm<br>
-                                <strong>Cores de pele:</strong> ${especie.skin_colors}<br>
-                                <strong>Cores de cabelo:</strong> ${especie.hair_colors}<br>
-                                <strong>Cores de olhos:</strong> ${especie.eye_colors}<br>
-                                <strong>Expectativa de vida:</strong> ${especie.average_lifespan} anos<br>
-                                <strong>Planeta natal:</strong> ${especie.homeworld}<br>
-                                <strong>Linguagem:</strong> ${especie.language}<br>
+                                <strong>Nome:</strong> ${especie.name === "unknown" ? "Desconhecido" : especie.name}<br>
+                                <strong>Classificação:</strong> ${especie.classification === "unknown" ? "Desconhecido" : especie.classification}<br>
+                                <strong>Designação:</strong> ${especie.designation === "unknown" ? "Desconhecido" : especie.designation}<br>
+                                <strong>Altura média:</strong> ${especie.average_height === "unknown" ? "Desconhecido" : `${especie.average_height} cm`} <br>
+                                <strong>Cores de pele:</strong> ${especie.skin_colors === "unknown" ? "Desconhecido" : especie.skin_colors}<br>
+                                <strong>Cores de cabelo:</strong> ${especie.hair_colors === "unknown" ? "Desconhecido" : especie.hair_colors}<br>
+                                <strong>Cores de olhos:</strong> ${especie.eye_colors === "unknown" ? "Desconhecido" : especie.eye_colors}<br>
+                                <strong>Expectativa de vida:</strong> ${especie.average_lifespan === "unknown" ? "Desconhecido" : `${especie.average_lifespan} anos`}<br>
+                                <strong>Planeta natal:</strong> ${especie.homeworld === "unknown" ? "Desconhecido" : especie.homeworld}<br>
+                                <strong>Linguagem:</strong> ${especie.language === "unknown" ? "Desconhecido" : especie.language}<br>
                                 <hr>
                                 <strong> Informações adicionais </strong>
                                 <br>
@@ -558,7 +564,7 @@ async function Consulta(linkConsulta, consultaAPI) {
                                 ${pilotos.length > 0 ? pilotos.map(piloto => `<li>${piloto}</li>`).join('') : 'Não tem<br>'}
                                 <br>
                                 <strong>Filmes:</strong><br>
-                                ${filmes.map(filme => `<li>${filme}</li>`).join('')}
+                                ${filmes.length > 0 ? filmes.map(filme => `<li>${filme}</li>`).join('') : 'Não tem<br>'}
                                 <br>
                             
                         `;
