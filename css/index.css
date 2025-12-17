@@ -1,5 +1,6 @@
 body {
     background-color: white;
+    overflow-x: hidden;
     margin: 0;
 }
 
@@ -132,3 +133,8 @@ h2{
   height: 40px;
   margin-left: 15px;
 }
+
+footer{
+  margin: 0;
+}
+

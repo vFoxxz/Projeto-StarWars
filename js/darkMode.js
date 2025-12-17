@@ -33,6 +33,6 @@ toggle.addEventListener("click", () => {
         saber.src = "../src/img/sabre_azul.png";
         window.parent.postMessage("disable-dark-mode", "*");
     }
-
+    
     saber.classList.toggle("rotacionado");
 });

@@ -2,22 +2,25 @@
     font-family: 'font-galaxy';
     src: url('../src/font/SF\ Distant\ Galaxy.ttf');
 }
-@font-face{
-  font-family: 'serifgothic';
-  src: url('../src/font/ITC\ SerifGothic.ttf');
+
+@font-face {
+    font-family: 'serifgothic';
+    src: url('../src/font/ITC\ SerifGothic.ttf');
 }
-@font-face{
-  font-family: 'serifgothic-bold';
-  src: url('../src/font/ITC\ SerifGothicBold.ttf');
+
+@font-face {
+    font-family: 'serifgothic-bold';
+    src: url('../src/font/ITC\ SerifGothicBold.ttf');
 }
 
 * {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
 }
-body, html {
-    background-color: #f3f3f3;
+
+body,
+html {
+    background-color: #ffffff;
     height: 100%;
     margin: 0;
     padding: 0;
@@ -26,10 +29,13 @@ body, html {
     min-height: 100vh;
 }
 
-body.dark-mode, html.-dark-mode {
+body.dark-mode,
+html.-dark-mode {
     background-color: #272626;
-    color: #ffffff; /* texto claro */
+    color: #ffffff;
+    /* texto claro */
 }
+
 main {
     flex: 1;
     display: flex;
@@ -40,7 +46,7 @@ body.dark-mode main {
     background-color: #272626;
 }
 
-h2{
+h2 {
     font-family: 'serifgothic';
     letter-spacing: 2px;
 }
@@ -50,7 +56,8 @@ h2{
     flex-direction: column;
     align-items: center;
     padding: 1vh;
-    input{
+
+    input {
         margin-top: 15px;
         font-family: 'serifgothic-bold';
         font-size: 18px;
@@ -68,7 +75,7 @@ body.dark-mode .barra-pesquisa input {
 }
 
 
-body.dark-mode .catalogo{
+body.dark-mode .catalogo {
     background-color: #5e0505;
 }
 
@@ -77,15 +84,16 @@ body.dark-mode .catalogo{
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
-    padding: 20px;
+    padding: 50px;
 }
 
 .catalogo {
     background-color: #c3d8f1;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: calc(20% - 20px); /* 5 cards por linha com gap */
-    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(25% - 20px);
+    /* 5 cards por linha com gap */
+    padding: 10px;
     font-size: 2.5vh;
     font-family: 'serifgothic-bold';
     transition: transform 0.2s;
@@ -113,15 +121,47 @@ body.dark-mode .info-card {
     color: #ffffff;
 }
 
-.raca{
+.raca {
     font-family: 'serifgothic-bold';
 }
+
 .linha-raca {
     font-family: 'serifgothic';
 }
 
-.modal-body{
-    li{
+.modal-body {
+    li {
         list-style-type: none;
+    }
+}
+
+footer {
+    margin: 0;
+}
+
+ul {
+    margin: 0;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    color: black;
+    font-family: 'serifgothic';
+
+    h5,
+    strong {
+        font-family: 'serifgothic-bold';
+        font-size: 2vh;
+    }
+}
+
+body.dark-mode .modal-content {
+    background-color: #272626;
+    color: white;
+
+    hr {
+        border: none;
+        height: 2px;
+        background-color: white;
     }
 }
