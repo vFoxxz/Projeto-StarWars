@@ -1,21 +1,36 @@
-/* Base */
-body {
-    background-color: white;
-    overflow-x: hidden;
-    margin: 0;
+
+
+@font-face {
+  font-family: 'font-galaxy';
+  src: url('../src/font/SF\ Distant\ Galaxy.ttf');
 }
 
 @font-face {
-    font-family: 'font-galaxy';
-    src: url('../src/font/SF\ Distant\ Galaxy.ttf');
-}
-@font-face{
   font-family: 'serifgothic';
   src: url('../src/font/ITC\ SerifGothic.ttf');
 }
-@font-face{
+
+@font-face {
   font-family: 'serifgothic-bold';
   src: url('../src/font/ITC\ SerifGothicBold.ttf');
+}
+
+body {
+  margin: 0;
+  background-color: white;
+  overflow-x: hidden;
+}
+
+header {
+  margin: 0;
+  padding: 0;
+}
+
+iframe {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: none;
 }
 
 body.dark-mode {
@@ -23,82 +38,87 @@ body.dark-mode {
   color: #ffffff;
 }
 
-/* Faixa principal */
 .faixa-principal {
-    background-image: url('../src/img/AnakinCapa.png');
-    background-repeat: no-repeat;
-    background-position: top center;
-    background-size: cover;
-    width: 100%;
-    margin-top: -2px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    height: 40rem;
-    outline: 2px solid #6ca5f0;
+  background-image: url('../src/img/AnakinCapa.png');
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 40rem;
+  outline: 2px solid #6ca5f0;
 }
+
 body.dark-mode .faixa-principal {
   background-image: url('../src/img/DarthVaderCapa.png');
   outline: 2px solid #6b0f0f;
+}
+
+
+.introducao-principal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  margin: 10px;
+  border-radius: 10px;
+  color: black;
+  background-color: #c3d8f1;
+  text-align: center;
+}
+
+.introducao-principal h3 {
+  font-family: 'serifgothic-bold';
+}
+
+.introducao-principal h1 {
+  font-weight: lighter;
+  margin-top: 5px;
+  font-family: 'font-galaxy';
+}
+
+body.dark-mode .introducao-principal {
+  background-color: #5e0505;
+  color: #ffffff;
+}
+
+body.dark-mode .introducao-principal h3 {
   margin-top: -5px;
 }
 
-/* Introdução */
-.introducao-principal {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-    margin: 10px;
-    border-radius: 10px;
-    color: black;
-    background-color: #c3d8f1;
-    text-align: center;
-}
-.introducao-principal h3 {
-    font-family: 'serifgothic-bold';
-}
-.introducao-principal h1 {
-    font-weight: lighter;
-    margin-top: 5px;
-    font-family: 'font-galaxy';
-}
-body.dark-mode .introducao-principal {
-    background-color: #5e0505;
-    color: #ffffff;
-}
-body.dark-mode .introducao-principal h3 {
-    margin-top: -5px;
-}
 
-/* Texto */
 .introducao-texto {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
+
 .introducao-texto .simbolo {
-    background-image: url('../src/img/simbolojedi.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: 11vh;
-    height: 11vh;
-}
-body.dark-mode .simbolo {
-    width: 15vh;
-    height: 15vh;
-    margin-top: -15px;
-    background-image: url('../src/img/simbolo_imperio.png');
-}
-.introducao-texto p {
-    font-size: 1.5rem;
-    font-family: 'serifgothic-bold';
-    line-height: 1.4;
-    max-width: 900px;
+  background-image: url('../src/img/simbolojedi.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 11vh;
+  height: 11vh;
 }
 
-/* GIF */
+body.dark-mode .simbolo {
+  width: 15vh;
+  height: 15vh;
+  margin-top: -15px;
+  background-image: url('../src/img/simbolo_imperio.png');
+}
+
+.introducao-texto p {
+  font-size: 1.5rem;
+  font-family: 'serifgothic-bold';
+  line-height: 1.4;
+  max-width: 900px;
+}
+
+
 .gif {
   background-image: url('../src/gif/AnakinGIF.gif');
   background-repeat: no-repeat;
@@ -109,15 +129,17 @@ body.dark-mode .simbolo {
   aspect-ratio: 3/2;
   border-radius: 10px;
 }
+
 body.dark-mode .gif {
   background-image: url('../src/gif/DarthVaderGIF.gif');
 }
 
-/* Frase final */
+
 h2 {
   font-family: 'serifgothic-bold';
   font-size: 2rem;
 }
+
 .div-frase {
   display: flex;
   align-items: center;
@@ -125,22 +147,25 @@ h2 {
   flex-wrap: wrap;
   margin-top: 1rem;
 }
+
 .SoleLua {
   width: 40px;
   height: 40px;
   margin-left: 15px;
 }
 
-/* Footer */
+
 footer {
   margin: 0;
 }
+
 .footer {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 1rem;
 }
+
 .footer-lista {
   display: flex;
   flex-wrap: wrap;
@@ -149,22 +174,50 @@ footer {
   list-style: none;
   padding: 0;
 }
+
 .footer-lista li a {
   text-decoration: none;
   color: inherit;
   font-family: 'serifgothic';
 }
 
+.nav-item .nav-link {
+  color: #353434;
+  font-family: 'serifgothic-bold';
+}
+
+h5 {
+  font-family: 'font-galaxy';
+}
+
+body.dark-mode .offcanvas {
+  background-color: #3a3a3a;
+  color: white;
+}
+
+body.dark-mode .nav-item .nav-link {
+  color: #ffffff;
+}
+
+body.dark-mode .btn-close {
+  filter: invert(1);
+}
 
 @media (max-width: 1024px) {
   .faixa-principal {
     height: 30rem;
   }
+
   .introducao-texto p {
     font-size: 1.3rem;
   }
+
   h2 {
     font-size: 1.6rem;
+  }
+
+  .nav-item .nav-link {
+    font-size: 1.2rem;
   }
 }
 
@@ -173,27 +226,37 @@ footer {
     height: 20rem;
     outline: none;
   }
+
   .introducao-principal {
     padding: 1rem;
     margin: 5px;
   }
+
   .introducao-texto p {
     font-size: 1.1rem;
   }
+
   .gif {
     max-width: 100%;
     aspect-ratio: 16/9;
   }
+
   h2 {
     font-size: 1.4rem;
   }
+
   .SoleLua {
     width: 30px;
     height: 30px;
   }
+
   .footer-lista {
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  body.dark-mode .introducao-principal {
+    margin-top: 2vw;
   }
 }
 
@@ -201,13 +264,20 @@ footer {
   .faixa-principal {
     height: 15rem;
   }
+
   .introducao-texto p {
     font-size: 1rem;
   }
+
   h2 {
     font-size: 1.2rem;
   }
+
   .gif {
     aspect-ratio: 4/3;
+  }
+
+  .nav-item .nav-link {
+    font-size: 1.5rem;
   }
 }

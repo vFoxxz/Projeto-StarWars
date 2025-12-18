@@ -44,7 +44,7 @@ const inputPesquisa = document.getElementById('searchInput');
 
 const containerLista = document.querySelector('.container-listas');
 
-const apiKey = `https://swapi.dev/api/${consultaAPI}/`;
+const apiKey = `https://swapi.info/api/${consultaAPI}/`;
 
 function formatarData(dataISO) {
     const data = new Date(dataISO);
@@ -64,7 +64,6 @@ function formatarValor(valor) {
     if (isNaN(numero)) {
         return "Desconhecido";
     }
-
     return numero.toLocaleString("pt-BR");
 }
 
@@ -82,7 +81,7 @@ async function fetchLocalStorage(chave, url) {
 }
 
 async function carregarTodos(consultaAPI) {
-    let url = `https://swapi.dev/api/${consultaAPI}/`;
+    let url = `https://swapi.info/api/${consultaAPI}/`;
     const chaveCache = `cache_${consultaAPI}`
 
     const cache = localStorage.getItem(chaveCache)
@@ -95,7 +94,7 @@ async function carregarTodos(consultaAPI) {
         const response = await fetch(url);
         const data = await response.json();
 
-        resultados.push(...data.results);
+        resultados.push(...data);
         url = data.next;
     }
 

@@ -10,6 +10,7 @@
 
 body {
   margin: 0;
+  padding: 0;
   overflow-y: hidden;
 }
 
@@ -66,7 +67,7 @@ body.dark-mode header::after {
   align-items: center;
   justify-content: center;
   padding: 2vh 2vw;
-  min-height: 60vh;
+  min-height: 63vh;
 }
 
 .center-logo {
@@ -164,37 +165,64 @@ header,
   opacity: 0;
 }
 
-@media (min-width: 1200px) {
+body.dark-mode .navbar-toggler {
+  border-color: white;
+  border-width: 0.1px;
+}
+
+body.dark-mode .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+body.dark-mode .navbar-toggler:focus,
+body.dark-mode .navbar-toggler:active {
+  border-color: white;
+  box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0.5);
+  outline: none;
+}
+
+@media (min-width: 1200px) and (max-width: 1599px) {
   .logo-star {
-    width: 8vw;
+    width: 12vw;
   }
 }
 
 @media (min-width: 1600px) {
   .logo-star {
-    width: 8vw;
+    width: 9vw;
   }
 }
 
-@media (min-width: 601px) and (max-width: 1024px) {
+@media (min-width: 1024px) and (max-width: 1599px) {
+  .logo-star {
+    width: 13vw;
+    margin-top: 10vh;
+  }
+
+  .logo-dark {
+    width: 5vw;
+    margin-top: 15vh;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1023px) {
   .header-cima {
-    min-height: 60vh;
+    min-height: 63vh;
     padding: 3vh 3vw;
   }
 
   .logo-star {
-    width: clamp(130px, 14vw, 300px);
+    width: 20vw;
     margin-top: 40vh;
   }
 
-  .logo-dark{
+  .logo-dark {
     width: 6vw;
     margin-top: 20vh;
   }
 
   .dark-button {
     right: 3vw;
-    /* mais folga à direita em telas maiores */
   }
 }
 
@@ -202,7 +230,7 @@ header,
   .logo-star {
     max-width: 200px;
     width: 30vw;
-    margin-top: 50vh;
+    margin-top: 45vh;
   }
 
   .logo-dark {
@@ -215,7 +243,7 @@ header,
   }
 
   .header-cima {
-    min-height: 60vh;
+    min-height: 63vh;
   }
 }
 
@@ -229,3 +257,4 @@ header,
     width: 15vw;
   }
 }
+

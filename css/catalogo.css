@@ -33,7 +33,6 @@ body.dark-mode,
 html.-dark-mode {
     background-color: #272626;
     color: #ffffff;
-    /* texto claro */
 }
 
 main {
@@ -194,12 +193,36 @@ body.dark-mode .modal-content {
 body.dark-mode .btn-close {
     filter: invert(1);
 }
+body.dark-mode .offcanvas {
+  background-color: #3a3a3a;
+  color: white;
+}
+
+body.dark-mode .nav-item .nav-link {
+  color: #ffffff;
+}
+
+body.dark-mode .btn-close {
+  filter: invert(1);
+}
+
+.nav-item .nav-link {
+  color: #353434;
+  font-family: 'serifgothic-bold';
+}
+
+h5 {
+  font-family: 'font-galaxy';
+}
 
 @media (max-width: 1024px) {
     .catalogo {
         width: calc(50% - 20px);
         max-width: 100%;
     }
+    .nav-item .nav-link {
+    font-size: 1.2rem;
+  }
 }
 
 @media (max-width: 600px) {
@@ -214,6 +237,9 @@ body.dark-mode .btn-close {
 
     .barra-pesquisa input {
         width: 80%;
+    }
+    .nav-item .nav-link {
+        font-size: 1.5rem;
     }
 }
 
