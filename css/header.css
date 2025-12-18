@@ -67,7 +67,7 @@ body.dark-mode header::after {
   align-items: center;
   justify-content: center;
   padding: 2vh 2vw;
-  min-height: 63vh;
+  min-height: 64vh;
 }
 
 .center-logo {
@@ -207,7 +207,6 @@ body.dark-mode .navbar-toggler:active {
 
 @media (min-width: 601px) and (max-width: 1023px) {
   .header-cima {
-    min-height: 63vh;
     padding: 3vh 3vw;
   }
 
@@ -242,9 +241,7 @@ body.dark-mode .navbar-toggler:active {
     display: none;
   }
 
-  .header-cima {
-    min-height: 63vh;
-  }
+
 }
 
 @media (max-width: 400px) {
