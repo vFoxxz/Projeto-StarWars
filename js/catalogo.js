@@ -100,6 +100,7 @@ async function carregarTodos(consultaAPI) {
 
     localStorage.setItem(chaveCache, JSON.stringify(resultados))
     return resultados;
+    
 }
 
 
@@ -107,8 +108,6 @@ async function carregarTodos(consultaAPI) {
 
 async function Consulta(linkConsulta, consultaAPI) {
     const jsonResposta = await fetchLocalStorage(`item_${linkConsulta}`, linkConsulta);
-
-
 
     if (consultaAPI === 'people') {
         // Consultas Planeta
@@ -205,6 +204,7 @@ async function Consulta(linkConsulta, consultaAPI) {
 
             });
             containerLista.appendChild(div);
+            
         }
     } else if (consultaAPI === 'planets') {
         tituloLista.textContent = 'Lista de planetas';
@@ -426,7 +426,7 @@ async function Consulta(linkConsulta, consultaAPI) {
         tituloLista.textContent = 'Lista de filmes';
         inputPesquisa.setAttribute('placeholder', 'Pesquisar filmes...')
         filmes.push(jsonResposta)
-        filmes.sort((a, b) => a.title.localeCompare(b.title))
+        filmes.sort((a, b) => a.episode_id - b.episode_id);
         containerLista.innerHTML = ''
         for (let filme of filmes) {
             const div = document.createElement('div');
@@ -590,6 +590,7 @@ async function Consulta(linkConsulta, consultaAPI) {
             containerLista.append(div)
         }
     }
+    localStorage.clear();
 }
 
 carregarTodos(consultaAPI).then(async (todos) => {
