@@ -293,7 +293,7 @@ async function Consulta(linkConsulta, consultaAPI) {
                                 <div class="info-card"> 
                                      <br>
                                      <span class="linha-raca"> <span class="raca"> Custo: </span> ${nave.cost_in_credits === "unknown" ? "Desconhecido" : formatarValor(nave.cost_in_credits)} </span><br>
-                                     <span class="linha-raca"> <span class="raca"> Comprimento: </span> ${nave.length === "unknown" ? "Desconhecido" : `${nave.length} Metros`}</span>
+                                     <span class="linha-raca"> <span class="raca"> Comprimento: </span> ${nave.length === "unknown" ? "Desconhecido" : `${formatarValor(nave.length)} Metros`}</span>
                                      
                                 </div>
                             `;
